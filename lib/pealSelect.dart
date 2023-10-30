@@ -129,10 +129,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+
+import 'quote.dart';
 
 
 
 class ImagePickerScreen extends StatefulWidget {
+  String? gender;
+  String? category;
+  String? size;
+
+  ImagePickerScreen({required this.category,required this.gender,required this.size});
   @override
   _ImagePickerScreenState createState() => _ImagePickerScreenState();
 }
@@ -227,6 +235,23 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
               },
             ),
           ),
+    Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Confirm'),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(()=>QuoteScreen(gender:widget.gender,category:widget.category,size:widget.size));
+                    },
+                    child: Image.asset(
+                      'assets/images/arrow-slider.png', // Replace with your image path
+                      width: 50,
+                      height: 50,
+                    ),
+                  ),
+                ],
+              ),
+         
         ],
       ),
     );

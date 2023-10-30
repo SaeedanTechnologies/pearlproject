@@ -119,7 +119,7 @@ class _NextScreenState extends State<NextScreen> {
 //   return menuItems;
 // }
 
-//String category = "selected";
+String categoryi = "Select Size";
 String necklaceValue = "45cm";
 String braceletValue = "15-16cm";
 String ringValue = "48mm";
@@ -143,26 +143,27 @@ String earringValue="2mm";
 
     widget.category == "necklace" ?
                Image.asset(
-                'assets/images/necklace.jpg', // Replace with your image path
-                width: 100,
-                height: 100,
+                'assets/images/necklace.png', // Replace with your image path
+                width: 300,
+                height: 300,
               )
               : widget.category == "bracelet" ?
                Image.asset(
                 'assets/images/bracelet.jpg', // Replace with your image path
-                width: 100,
-                height: 100,
+                width: 300,
+                height: 300,
               )
               :
               widget.category == "ring" ?
                 Image.asset(
                 'assets/images/ring.jpg', // Replace with your image path
-                width: 100,
-                height: 100,
+                width: 300,
+                height: 300,
               )
               :
               Container()
               ,
+                  SizedBox(height: 20),
                Text(
                 'Please Select Size',
                 style: TextStyle(fontStyle: FontStyle.italic,color: purpleColor),
@@ -177,20 +178,20 @@ String earringValue="2mm";
       value: necklaceValue,
       onChanged: (String? newValue){
         setState(() {
-          necklaceValue = newValue!;
+        necklaceValue = newValue!;
         });
       },
-      items: dropdownItems
+      items: necklace
       )
       :
  widget.category == "bracelet" ?   DropdownButton(
       value: braceletValue,
       onChanged: (String? newValue){
         setState(() {
-         braceletValue = newValue!;
+        braceletValue = newValue!;
         });
       },
-      items: dropdownItems
+      items: bracelet
       )
       :
        widget.category == "ring" ?   DropdownButton(
@@ -200,7 +201,7 @@ String earringValue="2mm";
           ringValue = newValue!;
         });
       },
-      items: dropdownItems
+      items: ring
       )
 :
  widget.category == "bagJewel" ?   DropdownButton(
@@ -218,7 +219,7 @@ String earringValue="2mm";
       value: earringValue,
       onChanged: (String? newValue){
         setState(() {
-          earringValue = newValue!;
+         earringValue = newValue!;
         });
       },
       items: earringss
@@ -232,13 +233,18 @@ String earringValue="2mm";
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
               SizedBox(height: 20),
+            
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Confirm'),
                   GestureDetector(
                     onTap: () {
-                      Get.to(()=>ImagePickerScreen());
+                      Get.to(()=>ImagePickerScreen(gender:widget.genderss,category:widget.category,size:widget.category == "necklace"?
+                      necklaceValue:widget.category == "bracelet"?braceletValue :widget.category == "ring"?ringValue:widget.category == "bagJewel"?bagJewelValue:widget.category == "earrings"?earringValue:"none"
+                      
+                      
+                      ));
                     },
                     child: Image.asset(
                       'assets/images/arrow-slider.png', // Replace with your image path
