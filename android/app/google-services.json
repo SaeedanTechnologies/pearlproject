@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "309952689430",
+    "project_id": "pearlpro-d5fb8",
+    "storage_bucket": "pearlpro-d5fb8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309952689430:android:8f36328ee0f5830be9cc37",
+        "android_client_info": {
+          "package_name": "com.pearl.pearlproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa0dOqlbK5GMbONobFFc6r1tH11GXyck4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
