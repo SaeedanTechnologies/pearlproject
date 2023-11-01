@@ -1,4 +1,11 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pearl/controller/userController.dart';
 
 
 class QuoteScreen extends StatefulWidget {
@@ -15,7 +22,90 @@ class QuoteScreen extends StatefulWidget {
 }
 
 class _QuoteScreenState extends State<QuoteScreen> {
+    TextEditingController nameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController accessoryTypeController = TextEditingController();
+  TextEditingController measureController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  TextEditingController modelScreenshotController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
 
+  // Assuming you've previously obtained the 'user' object from Firebase authentication
+  // and the Firestore 'orders' collection reference
+//   void submitOrder() async {
+    
+//     final newOrder = {
+//       'name': nameController.text,
+//       'phoneNumber': phoneNumberController.text,
+//       'email': emailController.text,
+//       'accessoryType': accessoryTypeController.text,
+//       'measure': measureController.text,
+//       'modelScreenshot': userController.imageFile,
+//       'message': messageController.text,
+//     };
+// //     final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
+// // final auth.User user = _firebaseAuth.currentUser!;
+// //      userEmailUid = credential.user!.uid;
+// //      update();
+//     FirebaseFirestore.instance.collection('users').doc(user.uid).collection('orders').add(newOrder);
+//   }
+
+    Future<void>? alerts(){
+    showDialog(context: context, builder: (context){
+      return     AlertDialog(
+        content: new
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+          
+            SizedBox(height: 30,),
+            GestureDetector(
+              onTap:(){
+                // _pickImage(ImageSource.gallery);
+                selectImages();
+                Navigator.pop(context);
+                print("object");
+              } ,
+              child: Row(
+                children: [
+                   Icon(Icons.browse_gallery),
+       
+                            //                Container(
+                            // height: 40,
+                            // width: 70,
+                            // decoration: BoxDecoration(
+                            //     color: Colors.black,
+                            //     image: DecorationImage(image: AssetImage("assets/3.png"),fit: BoxFit.cover)),),
+                  SizedBox(width: 5),
+                  Text('Choose from Gallery '),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+UserController userController = Get.put(UserController());
+ XFile? _imageFile;
+ final ImagePicker _picker = ImagePicker();
+    var imageFile;
+    void  selectImages()async {
+    final XFile? images = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+
+   _imageFile =  images!;
+
+    });
+    
+    if (images !=null) {
+        userController.imageFile = images.path == null ? "" :images.path;
+    userController.update();
+    }
+  
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +124,15 @@ class _QuoteScreenState extends State<QuoteScreen> {
               children: <Widget>[
                 Text('Name'),
                 TextField(
+                  controller: nameController,
+                  
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                 ),
                 Text('Phone Number'),
                 TextField(
+                  controller: phoneNumberController,
                   decoration: InputDecoration(
                     hintText: 'Enter your phone number',
                     border: OutlineInputBorder(),
@@ -47,6 +140,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 ),
                 Text('Email'),
                 TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     hintText: 'Enter your email',
                     border: OutlineInputBorder(),
@@ -54,6 +148,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 ),
                 Text('Gender'),
                 TextField(
+                  controller: genderController,
                   readOnly: true,
                   decoration: InputDecoration(
                     hintText: widget.gender,
@@ -62,6 +157,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 ),
                 Text('Accessory Type'),
                 TextField(
+                  controller: accessoryTypeController,
                   readOnly: true,
                   decoration: InputDecoration(
                     hintText: widget.category,
@@ -70,6 +166,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 ),
                 Text('Measure'),
                 TextField(
+                  controller: measureController,
                   readOnly: true,
                   decoration: InputDecoration(
                     hintText: widget.size,
@@ -82,7 +179,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
                     border: Border.all(color: Colors.black),
                   ),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async{
+                     await  alerts();
                       // Handle image upload
                     },
                     child: Text('Upload Image'),
@@ -90,6 +188,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 ),
                 Text('Message'),
                 TextField(
+                  controller: messageController,
                   maxLines: 5,
                   decoration: InputDecoration(
                     hintText: 'Enter your message',
@@ -100,8 +199,9 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle quote submission
+                    onPressed: ()async {
+                    // submitOrder();
+                     await userController.uploadFilesForOrder(_imageFile,context,nameController.text,phoneNumberController.text,emailController.text,widget.gender!,widget.category!,widget.size!,messageController.text);
                     },
                 
              
@@ -116,3 +216,6 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
+
+

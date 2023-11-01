@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pearl/adminPanel/awaitingAdmin.dart';
 import 'package:pearl/loginScreen.dart';
 
 import '../controller/userController.dart';
@@ -84,6 +85,10 @@ class _AdminScreenState extends State<AdminScreen> {
  
     XFile? _imageFile;
   UserController userController = Get.put(UserController());
+
+
+TextEditingController messageController = TextEditingController();
+
   Future<void>? alerts(){
     showDialog(context: context, builder: (context){
       return     AlertDialog(
@@ -131,6 +136,50 @@ class _AdminScreenState extends State<AdminScreen> {
         automaticallyImplyLeading: false,
         
           actions: [
+                    StreamBuilder<QuerySnapshot>(
+                stream: 
+                FirebaseFirestore.instance
+                                .collection('orders')
+                               .where("Qoutation",isEqualTo: false)
+                                
+                                .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return 
+                    Row(children: [
+                      Icon(Icons.notifications),
+                      Text('0')
+                      ]
+                      
+                      );
+                  }
+
+                  if (snapshot.hasError) {
+                    return Text( '0');
+                  }
+
+                  if (snapshot.hasData) {
+                    int recordCount = snapshot.data!.docs.length;
+                    return
+                    
+                         GestureDetector(
+                          onTap: (){
+                  Get.to(()=>AdminApproval())  ;
+                          },
+                           child: Row(children: [
+                                               Icon(Icons.notifications),
+                           Text( '$recordCount')
+                                               ]
+                                               
+                                               ),
+                         );
+                
+                  }
+
+                  return Text( '0');
+                },
+              ),
+              SizedBox(width: 20,),
            ElevatedButton(
                 onPressed: ()async {
                   await  _firebaseAuth.signOut().then((value) => Get.to(()=>LoginScreen()));
@@ -139,24 +188,41 @@ class _AdminScreenState extends State<AdminScreen> {
                 },
                 child: Text('Logout'),
               ),
+
+         
         
         ],),
       body: Container(
+       height: MediaQuery.of(context).size.height,
+       width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage("assets/images/flower.jpg"))
+          image: DecorationImage(image: AssetImage("assets/images/flower.jpg"),fit: BoxFit.cover)
         ),
-        child: Column(children: [
-
-          Center(child: GestureDetector(
-                onTap: ()async{
-          
+       
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+  ElevatedButton(
+                onPressed: ()async {
+                  await alerts();
+                  
+              //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
                 },
-                 child: Container(height: 30,width: 30,child: IconButton(
-                  onPressed: ()async {
-                      await alerts();
-                  }, 
-                 icon: Icon(Icons.upload_file)),),
-               ),),
+                child: Text('Upload Image'),
+              ),
+          // Center(child: GestureDetector(
+          //       onTap: ()async{
+          
+          //       },
+          //        child: Container(height: 30,width: 30,child: IconButton(
+          //         onPressed: ()async {
+          //             await alerts();
+          //         }, 
+          //        icon: Icon(Icons.upload_file)
+                 
+          //        ),),
+          //      ),),
+          SizedBox(height: 10,),
 
            if (_imageFile != null) ...[
                             Image.file(
@@ -165,6 +231,16 @@ class _AdminScreenState extends State<AdminScreen> {
                               File(
                                 
                                 _imageFile!.path)),
+  Text('Message'),
+                TextField(
+                  controller: messageController,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    hintText: 'Enter your message',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -173,15 +249,16 @@ class _AdminScreenState extends State<AdminScreen> {
                                 //   onPressed: _cropImage,
                                 // ),
                                 ElevatedButton(
-                              style: ElevatedButton.styleFrom(primary: Color(0xFF9D0105),),
+                              style: ElevatedButton.styleFrom(primary: Colors.black,),
                                   child: Icon(Icons.refresh,),
                                   onPressed: _clear,
                                 ),
                                                             ElevatedButton(
-                              style: ElevatedButton.styleFrom(primary: Color(0xFF9D0105),),
+                              style: ElevatedButton.styleFrom(primary: Colors.black,),
                                   child: Icon(Icons.upload_file,),
                                   onPressed:()async{
-                              await       userController.uploadFilesPassport(_imageFile,context);
+                              await       
+                              userController.uploadFilesPassport(_imageFile,context,messageController.text);
                                   },
                                 ),
             

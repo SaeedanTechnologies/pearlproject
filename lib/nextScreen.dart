@@ -133,7 +133,8 @@ String earringValue="2mm";
         title: Text('Next Screen'),
       ),
       body: Center(
-        child: Container(
+        child:
+        Container(
              decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage("assets/images/flower.jpg"),fit: BoxFit.cover)
         ),

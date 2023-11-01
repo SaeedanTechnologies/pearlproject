@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:pearl/awaiting.dart';
 import 'package:pearl/homeScreen.dart';
 
 
@@ -21,7 +22,7 @@ class _SiteEngineerState extends State<SiteEngineer > {
    List<Widget> _widgetOptions = <Widget>[  
 
    HomeScreen(),
-  HomeScreen(),
+  CustomerApproval(),
 
   ];  
   

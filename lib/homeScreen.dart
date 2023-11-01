@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pearl/categoryScreen.dart';
 import 'package:pearl/const/const.dart';
 import 'package:pearl/controller/controllerRef.dart';
 import 'package:pearl/loginScreen.dart';
+import 'package:pearl/marketplace.dart';
 import 'package:pearl/nextScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
   String? genders;
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +31,21 @@ class _HomeScreenState extends State<HomeScreen> {
            ElevatedButton(
                 onPressed: ()async {
                   await  _firebaseAuth.signOut().then((value) => Get.to(()=>LoginScreen()));
-                  
+         //          userController.sendNotificationToPlayer("6fbbc31d-fb5d-4d8f-bc0b-5fd4aeb2d9b8", "Your notification message");
               //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
                 },
                 child: Text('Logout'),
               ),
-        
+             
+       // Text(_firebaseAuth.currentUser!.uid)
+         ElevatedButton(
+                onPressed: ()async {
+                   Get.to(()=> ImageGridScreen());
+         //          userController.sendNotificationToPlayer("6fbbc31d-fb5d-4d8f-bc0b-5fd4aeb2d9b8", "Your notification message");
+              //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
+                },
+                child: Text('Marketplace'),
+              ),
         ],
       ),
       body: Container(

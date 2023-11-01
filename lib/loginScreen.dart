@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pearl/controller/userController.dart';
 import 'package:pearl/signupScreen.dart';
 import 'package:pearl/tabBar.dart';
@@ -19,6 +20,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
    UserController userController = Get.put(UserController());
   
+
+  String playerId ="";
+
+ 
+
+
+
   Future<void> _signIn() async {
     try {
        final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -78,8 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: 
-              (){
- userController.signInWithEmailAndPassword(_emailController.text, _passwordController.text, context);
+              ()async{
+     await userController.signInWithEmailAndPassword(_emailController.text, _passwordController.text, context);
               },
               
              

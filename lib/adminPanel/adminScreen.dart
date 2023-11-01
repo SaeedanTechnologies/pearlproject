@@ -1,7 +1,9 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pearl/adminPanel/adminHome.dart';
+import 'package:pearl/adminPanel/awaitingAdmin.dart';
 import 'package:pearl/homeScreen.dart';
 
 
@@ -22,11 +24,19 @@ class _AdminHomeState extends State<AdminHome > {
    List<Widget> _widgetOptions = <Widget>[  
 
    AdminScreen(),
-    AdminScreen(),
+    AdminApproval(),
  // awaitingAdmin(),
 
   ];  
-  
+int tt = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
   void _onItemTapped(int index) {  
     setState(() {  
       _selectedIndex = index;  
@@ -49,15 +59,18 @@ class _AdminHomeState extends State<AdminHome > {
         items: const <BottomNavigationBarItem>[  
           BottomNavigationBarItem(  
             icon: Icon(Icons.link),  
-            label: "Attendance",  
+            label: "Admin",  
             backgroundColor: Colors.white  ,
            
            
 
           ),  
+          
           BottomNavigationBarItem(  
             icon: Icon(Icons.comment),  
-         label: "Time",  
+         label: 
+         
+         "Orders",  
             backgroundColor: Colors.white, 
           ),  
          
