@@ -62,7 +62,7 @@ int totalSum  =0;
   return rndnumber;
 }
 
-    Future<UploadTask?> uploadFilesPassport(XFile? files,context,String message) async {
+    Future<UploadTask?> uploadFilesPassport(XFile? files,context,String message,String price,String cat) async {
   
     //await getIDo();
      String rand = await tenNumberGenerated();
@@ -102,7 +102,9 @@ int totalSum  =0;
            FirebaseFirestore.instance.collection("productImages").add({
               
                 "producImage":uploadpaths,
-                "description":message
+                "description":message,
+                "price":price,
+                "category":cat
            
 
            });

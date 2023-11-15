@@ -54,7 +54,18 @@ class AdminScreen extends StatefulWidget {
 //     });
 
 // }
+ List<DropdownMenuItem<String>> get category{
+  List<DropdownMenuItem<String>> menuItems = [
+    DropdownMenuItem(child: Text("ring"),value: "ring"),
+    DropdownMenuItem(child: Text("bracelet"),value: "bracelet"),
+   
+      
 
+  ];
+  return menuItems;
+}
+
+String cat = "ring";
 
 
 
@@ -88,6 +99,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
 
 TextEditingController messageController = TextEditingController();
+TextEditingController priceController = TextEditingController();
 
   Future<void>? alerts(){
     showDialog(context: context, builder: (context){
@@ -180,6 +192,7 @@ TextEditingController messageController = TextEditingController();
                 },
               ),
               SizedBox(width: 20,),
+
            ElevatedButton(
                 onPressed: ()async {
                   await  _firebaseAuth.signOut().then((value) => Get.to(()=>LoginScreen()));
@@ -188,8 +201,6 @@ TextEditingController messageController = TextEditingController();
                 },
                 child: Text('Logout'),
               ),
-
-         
         
         ],),
       body: Container(
@@ -241,6 +252,27 @@ TextEditingController messageController = TextEditingController();
                   ),
                 ),
 
+                 Text('Price'),
+                TextField(
+                  controller: priceController,
+                  keyboardType: TextInputType.number,
+                //  maxLines: 5,
+                  decoration: InputDecoration(
+                    hintText: 'Enter your price',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+
+                          DropdownButton(
+      value: cat,
+      onChanged: (String? newValue){
+        setState(() {
+        cat = newValue!;
+        });
+      },
+      items: category
+      ) ,
+
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -258,7 +290,7 @@ TextEditingController messageController = TextEditingController();
                                   child: Icon(Icons.upload_file,),
                                   onPressed:()async{
                               await       
-                              userController.uploadFilesPassport(_imageFile,context,messageController.text);
+                              userController.uploadFilesPassport(_imageFile,context,messageController.text,priceController.text,cat);
                                   },
                                 ),
             
@@ -270,8 +302,11 @@ TextEditingController messageController = TextEditingController();
                             // Uploader(file: _imageFile)
                           ],
       /////    ElevatedButton(onPressed: (){}, child: Text("Upload Image")),
-          
-      ],),),
+   
+      ],
+      ),
+      
+      ),
     );
   }
 }

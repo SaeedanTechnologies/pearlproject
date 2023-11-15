@@ -175,7 +175,8 @@ String earringValue="2mm";
               //   height: 100,
               // ),
               SizedBox(height: 20),
-  widget.category == "necklace" ?   DropdownButton(
+  widget.category == "necklace" ? 
+    DropdownButton(
       value: necklaceValue,
       onChanged: (String? newValue){
         setState(() {

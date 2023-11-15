@@ -35,6 +35,9 @@ class ImageGrid extends StatelessWidget {
       itemBuilder: (context, index) {
         final imageUrl = images[index]['producImage'];
         final name = images[index]['description'];
+        // final price = images[index]['price'];
+        
+        
 
         return GestureDetector(
           onTap: () {
@@ -47,7 +50,8 @@ class ImageGrid extends StatelessWidget {
                 backgroundImage: NetworkImage(imageUrl),
               ),
               SizedBox(height: 8),
-              Text(name),
+              Expanded(child: Text(name)),
+            //  Text(price)
             ],
           ),
         );

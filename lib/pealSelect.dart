@@ -130,6 +130,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:pearl/adminPanel/adminHome.dart';
 
 import 'quote.dart';
 
@@ -167,7 +168,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('productImages').snapshots(),
+              stream: FirebaseFirestore.instance.collection('productImages').where("category",isEqualTo: widget.category).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
@@ -191,7 +192,12 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                             Positioned(
                               left: left,
                               top: top,
-                              child: Image.network(data['imageUrl'], width: 300, height: 300),
+                              child:
+                                            CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(data['imageUrl']),
+              ),
+                             
                             ),
                           );
                         });
@@ -201,16 +207,16 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                           data: {
                             'imageUrl': imageUrl,
                           },
-                          feedback: Image.network(
-                            imageUrl,
-                            width: 300,
-                            height: 300,
-                          ),
-                          childWhenDragging: Image.network(
-                            imageUrl,
-                            width: 250,
-                            height: 250,
-                          ),
+                          feedback:
+                                      CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(imageUrl),
+              ),
+                          childWhenDragging:
+                                     CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(imageUrl),
+              ),
                           child: Builder(
                             builder: (context) {
                               return GestureDetector(
@@ -219,10 +225,16 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                                     _position = details.globalPosition;
                                   });
                                 },
-                                child: Image.network(
-                                  imageUrl,
-                                  width: 300,
-                                  height: 300,
+                                child: 
+                                             CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(imageUrl),
+              
+                                  // child: Image.network(
+                                  //   imageUrl,
+                                  //   width: 30,
+                                  //   height: 30,
+                                  // ),
                                 ),
                               );
                             },
