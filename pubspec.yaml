@@ -43,7 +43,8 @@ dependencies:
   drag_and_drop_flutter: ^0.3.0
   onesignal_flutter: ^5.0.3
   http: ^1.1.0
-  sign_in_with_apple: ^5.0.0
+  google_sign_in: ^6.1.6
+
 
 
   # The following adds the Cupertino Icons font to your application.
