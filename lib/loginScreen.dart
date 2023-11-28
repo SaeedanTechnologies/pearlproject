@@ -1,16 +1,10 @@
-<<<<<<< Updated upstream
 import 'package:auth_buttons/auth_buttons.dart';
-=======
->>>>>>> Stashed changes
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-<<<<<<< Updated upstream
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
-=======
->>>>>>> Stashed changes
 import 'package:pearl/controller/userController.dart';
 import 'package:pearl/homeScreen.dart';
 import 'package:pearl/signupScreen.dart';
@@ -29,10 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   UserController userController = Get.put(UserController());
-<<<<<<< Updated upstream
-=======
-  late SharedPreferences _prefs;
->>>>>>> Stashed changes
 
   String playerId = "";
 
@@ -105,23 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 Get.to(() => SignUpScreen());
               },
               child: const Text('SignUp'),
-<<<<<<< Updated upstream
-=======
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _handleSignIn,
-              child: const Text('Sign in with Google'),
-            ),
-            // ElevatedButton(
-            //   onPressed: _handleAppleSignIn,
-            //   child: Text('Sign in with Apple'),
-            // ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _handleSignOut,
-              child: const Text('Sign out'),
->>>>>>> Stashed changes
             ),
             const SizedBox(
               height: 20,
@@ -163,7 +136,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-<<<<<<< Updated upstream
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
@@ -172,21 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _handleSignIn() async {
     try {
       await _googleSignIn.signIn().then((value) => Get.to(() => HomeScreen()));
-=======
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
-
-  _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn().then((value) {
-        Get.to(() => HomeScreen());
-      });
->>>>>>> Stashed changes
     } catch (error) {
       print(error);
     }
   }
-<<<<<<< Updated upstream
-=======
 
   _handleSignOut() async {
     try {
@@ -210,5 +171,4 @@ class _LoginScreenState extends State<LoginScreen> {
   //     print(error);
   //   }
   // }
->>>>>>> Stashed changes
 }
