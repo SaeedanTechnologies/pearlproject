@@ -7,7 +7,7 @@ import 'package:pearl/pealSelect.dart';
 class NextScreen extends StatefulWidget {
   String? genderss;
   String? category;
-  NextScreen({this.genderss,this.category});
+  NextScreen({this.genderss, this.category});
   @override
   State<NextScreen> createState() => _NextScreenState();
 }
@@ -15,99 +15,86 @@ class NextScreen extends StatefulWidget {
 class _NextScreenState extends State<NextScreen> {
   // final List<String> dropdownItems = [
   // "asdasd",
-    
+
   // ];
-  List<DropdownMenuItem<String>> get dropdownItems{
-  List<DropdownMenuItem<String>> menuItems = [
-    DropdownMenuItem(child: Text("USA"),value: "USA"),
-    DropdownMenuItem(child: Text("Canada"),value: "Canada"),
-    DropdownMenuItem(child: Text("Brazil"),value: "Brazil"),
-    DropdownMenuItem(child: Text("England"),value: "England"),
-  ];
-  return menuItems;
-}
-  List<DropdownMenuItem<String>> get bracelet{
-  List<DropdownMenuItem<String>> menuItems = [
-    DropdownMenuItem(child: Text("15-16cm"),value: "15-16cm"),
-    DropdownMenuItem(child: Text("16-17cm"),value: "16-17cm"),
-    DropdownMenuItem(child: Text("17-18cm"),value: "17-18cm"),
-    DropdownMenuItem(child: Text("18-19cm"),value: "18-19cm"),
-    DropdownMenuItem(child: Text("19-20cm"),value: "19-20cm"),
-    DropdownMenuItem(child: Text("20-21cm"),value: "20-21cm"),
-  ];
-  return menuItems;
-}
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "USA", child: Text("USA")),
+      const DropdownMenuItem(value: "Canada", child: Text("Canada")),
+      const DropdownMenuItem(value: "Brazil", child: Text("Brazil")),
+      const DropdownMenuItem(value: "England", child: Text("England")),
+    ];
+    return menuItems;
+  }
 
-  List<DropdownMenuItem<String>> get necklace{
-  List<DropdownMenuItem<String>> menuItems = [
-    DropdownMenuItem(child: Text("45cm"),value: "45cm"),
-    DropdownMenuItem(child: Text("50cm"),value: "50cm"),
-    DropdownMenuItem(child: Text("55cm"),value: "55cm"),
-    DropdownMenuItem(child: Text("60cm"),value: "60cm"),
+  List<DropdownMenuItem<String>> get bracelet {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "15-16cm", child: Text("15-16cm")),
+      const DropdownMenuItem(value: "16-17cm", child: Text("16-17cm")),
+      const DropdownMenuItem(value: "17-18cm", child: Text("17-18cm")),
+      const DropdownMenuItem(value: "18-19cm", child: Text("18-19cm")),
+      const DropdownMenuItem(value: "19-20cm", child: Text("19-20cm")),
+      const DropdownMenuItem(value: "20-21cm", child: Text("20-21cm")),
+    ];
+    return menuItems;
+  }
 
-  ];
-  return menuItems;
-}
+  List<DropdownMenuItem<String>> get necklace {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "45cm", child: Text("45cm")),
+      const DropdownMenuItem(value: "50cm", child: Text("50cm")),
+      const DropdownMenuItem(value: "55cm", child: Text("55cm")),
+      const DropdownMenuItem(value: "60cm", child: Text("60cm")),
+    ];
+    return menuItems;
+  }
 
+  List<DropdownMenuItem<String>> get bagJewels {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "4cm", child: Text("4cm")),
+      const DropdownMenuItem(value: "5cm", child: Text("5cm")),
+      const DropdownMenuItem(value: "6cm", child: Text("6cm")),
+      const DropdownMenuItem(value: "7cm", child: Text("7cm")),
+      const DropdownMenuItem(value: "8cm", child: Text("8cm")),
+    ];
+    return menuItems;
+  }
 
- List<DropdownMenuItem<String>> get bagJewels{
-  List<DropdownMenuItem<String>> menuItems = [
-    DropdownMenuItem(child: Text("4cm"),value: "4cm"),
-    DropdownMenuItem(child: Text("5cm"),value: "5cm"),
-    DropdownMenuItem(child: Text("6cm"),value: "6cm"),
-    DropdownMenuItem(child: Text("7cm"),value: "7cm"),
-    DropdownMenuItem(child: Text("8cm"),value: "8cm"),
+  List<DropdownMenuItem<String>> get earringss {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "2mm", child: Text("2mm")),
+      const DropdownMenuItem(value: "3mm", child: Text("3mm")),
+      const DropdownMenuItem(value: "4mm", child: Text("4mm")),
+      const DropdownMenuItem(value: "5mm", child: Text("5mm")),
+      const DropdownMenuItem(value: "6mm", child: Text("6mm")),
+      const DropdownMenuItem(value: "7mm", child: Text("7mm")),
+    ];
+    return menuItems;
+  }
 
-  ];
-  return menuItems;
-}
-
-
- List<DropdownMenuItem<String>> get earringss{
-  List<DropdownMenuItem<String>> menuItems = [
-    DropdownMenuItem(child: Text("2mm"),value: "2mm"),
-    DropdownMenuItem(child: Text("3mm"),value: "3mm"),
-    DropdownMenuItem(child: Text("4mm"),value: "4mm"),
-    DropdownMenuItem(child: Text("5mm"),value: "5mm"),
-
-     DropdownMenuItem(child: Text("6mm"),value: "6mm"),
-      DropdownMenuItem(child: Text("7mm"),value: "7mm"),
-      
-
-  ];
-  return menuItems;
-}
-
-
-
-
-
-  List<DropdownMenuItem<String>> get ring{
-  List<DropdownMenuItem<String>> menuItems = [
-    DropdownMenuItem(child: Text("48mm"),value: "48mm"),
-    DropdownMenuItem(child: Text("49mm"),value: "49mm"),
-    DropdownMenuItem(child: Text("50mm"),value: "50mm"),
-    DropdownMenuItem(child: Text("51mm"),value: "51mm"),
-
-     DropdownMenuItem(child: Text("52mm"),value: "52mm"),
-      DropdownMenuItem(child: Text("53mm"),value: "53mm"),
-       DropdownMenuItem(child: Text("54mm"),value: "54mm"),
-        DropdownMenuItem(child: Text("55mm"),value: "55mm"),
-         DropdownMenuItem(child: Text("56mm"),value: "56mm"),
-
-           DropdownMenuItem(child: Text("57mm"),value: "57mm"),
-      DropdownMenuItem(child: Text("58mm"),value: "58mm"),
-       DropdownMenuItem(child: Text("59mm"),value: "59mm"),
-        DropdownMenuItem(child: Text("60mm"),value: "60mm"),
-         DropdownMenuItem(child: Text("61mm"),value: "61mm"),
-            DropdownMenuItem(child: Text("62mm"),value: "62mm"),
-       DropdownMenuItem(child: Text("63mm"),value: "63mm"),
-        DropdownMenuItem(child: Text("64mm"),value: "64mm"),
-         DropdownMenuItem(child: Text("65mm"),value: "65mm"),
-
-  ];
-  return menuItems;
-}
+  List<DropdownMenuItem<String>> get ring {
+    List<DropdownMenuItem<String>> menuItems = [
+      const DropdownMenuItem(value: "48mm", child: Text("48mm")),
+      const DropdownMenuItem(value: "49mm", child: Text("49mm")),
+      const DropdownMenuItem(value: "50mm", child: Text("50mm")),
+      const DropdownMenuItem(value: "51mm", child: Text("51mm")),
+      const DropdownMenuItem(value: "52mm", child: Text("52mm")),
+      const DropdownMenuItem(value: "53mm", child: Text("53mm")),
+      const DropdownMenuItem(value: "54mm", child: Text("54mm")),
+      const DropdownMenuItem(value: "55mm", child: Text("55mm")),
+      const DropdownMenuItem(value: "56mm", child: Text("56mm")),
+      const DropdownMenuItem(value: "57mm", child: Text("57mm")),
+      const DropdownMenuItem(value: "58mm", child: Text("58mm")),
+      const DropdownMenuItem(value: "59mm", child: Text("59mm")),
+      const DropdownMenuItem(value: "60mm", child: Text("60mm")),
+      const DropdownMenuItem(value: "61mm", child: Text("61mm")),
+      const DropdownMenuItem(value: "62mm", child: Text("62mm")),
+      const DropdownMenuItem(value: "63mm", child: Text("63mm")),
+      const DropdownMenuItem(value: "64mm", child: Text("64mm")),
+      const DropdownMenuItem(value: "65mm", child: Text("65mm")),
+    ];
+    return menuItems;
+  }
 //   List<DropdownMenuItem<String>> get necklace{
 //   List<DropdownMenuItem<String>> menuItems = [
 //     DropdownMenuItem(child: Text("45cm"),value: "45cm"),
@@ -119,134 +106,132 @@ class _NextScreenState extends State<NextScreen> {
 //   return menuItems;
 // }
 
-String categoryi = "Select Size";
-String necklaceValue = "45cm";
-String braceletValue = "15-16cm";
-String ringValue = "48mm";
-String bagJewelValue =  "4cm";
-String earringValue="2mm";
- // Use GetX for global state management
+  String categoryi = "Select Size";
+  String necklaceValue = "45cm";
+  String braceletValue = "15-16cm";
+  String ringValue = "48mm";
+  String bagJewelValue = "4cm";
+  String earringValue = "2mm";
+  // Use GetX for global state management
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Next Screen'),
+        title: const Text('Next Screen'),
       ),
       body: Center(
-        child:
-        Container(
-             decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage("assets/images/flower.jpg"),fit: BoxFit.cover)
-        ),
+        child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/flower.jpg"),
+                  fit: BoxFit.cover)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
-    widget.category == "necklace" ?
-               Image.asset(
-                'assets/images/necklace.png', // Replace with your image path
-                width: 300,
-                height: 300,
-              )
-              : widget.category == "bracelet" ?
-               Image.asset(
-                'assets/images/bracelet.jpg', // Replace with your image path
-                width: 300,
-                height: 300,
-              )
-              :
-              widget.category == "ring" ?
-                Image.asset(
-                'assets/images/ring.jpg', // Replace with your image path
-                width: 300,
-                height: 300,
-              )
-              :
-              Container()
-              ,
-                  SizedBox(height: 20),
-               Text(
+              widget.category == "necklace"
+                  ? Image.asset(
+                      'assets/images/necklace.png', // Replace with your image path
+                      width: 300,
+                      height: 300,
+                    )
+                  : widget.category == "bracelet"
+                      ? Image.asset(
+                          'assets/images/bracelet.jpg', // Replace with your image path
+                          width: 300,
+                          height: 300,
+                        )
+                      : widget.category == "ring"
+                          ? Image.asset(
+                              'assets/images/ring.jpg', // Replace with your image path
+                              width: 300,
+                              height: 300,
+                            )
+                          : Container(),
+              const SizedBox(height: 20),
+              Text(
                 'Please Select Size',
-                style: TextStyle(fontStyle: FontStyle.italic,color: purpleColor),
+                style:
+                    TextStyle(fontStyle: FontStyle.italic, color: purpleColor),
               ),
               // Image.asset(
               //   'assets/images/arrow-slider.png', // Replace with your image path
               //   width: 100,
               //   height: 100,
               // ),
-              SizedBox(height: 20),
-  widget.category == "necklace" ? 
-    DropdownButton(
-      value: necklaceValue,
-      onChanged: (String? newValue){
-        setState(() {
-        necklaceValue = newValue!;
-        });
-      },
-      items: necklace
-      )
-      :
- widget.category == "bracelet" ?   DropdownButton(
-      value: braceletValue,
-      onChanged: (String? newValue){
-        setState(() {
-        braceletValue = newValue!;
-        });
-      },
-      items: bracelet
-      )
-      :
-       widget.category == "ring" ?   DropdownButton(
-      value: ringValue,
-      onChanged: (String? newValue){
-        setState(() {
-          ringValue = newValue!;
-        });
-      },
-      items: ring
-      )
-:
- widget.category == "bagJewel" ?   DropdownButton(
-      value: bagJewelValue,
-      onChanged: (String? newValue){
-        setState(() {
-          bagJewelValue = newValue!;
-        });
-      },
-      items: bagJewels
-      )
-      :
-
- widget.category == "earrings" ?   DropdownButton(
-      value: earringValue,
-      onChanged: (String? newValue){
-        setState(() {
-         earringValue = newValue!;
-        });
-      },
-      items: earringss
-      )
-      :
-      Container()
-  ,
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              widget.category == "necklace"
+                  ? DropdownButton(
+                      value: necklaceValue,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          necklaceValue = newValue!;
+                        });
+                      },
+                      items: necklace)
+                  : widget.category == "bracelet"
+                      ? DropdownButton(
+                          value: braceletValue,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              braceletValue = newValue!;
+                            });
+                          },
+                          items: bracelet)
+                      : widget.category == "ring"
+                          ? DropdownButton(
+                              value: ringValue,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  ringValue = newValue!;
+                                });
+                              },
+                              items: ring)
+                          : widget.category == "bagJewel"
+                              ? DropdownButton(
+                                  value: bagJewelValue,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      bagJewelValue = newValue!;
+                                    });
+                                  },
+                                  items: bagJewels)
+                              : widget.category == "earrings"
+                                  ? DropdownButton(
+                                      value: earringValue,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          earringValue = newValue!;
+                                        });
+                                      },
+                                      items: earringss)
+                                  : Container(),
+              const SizedBox(height: 20),
+              const Text(
                 'Select size',
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
-              SizedBox(height: 20),
-            
+              const SizedBox(height: 20),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Confirm'),
+                  const Text('Confirm'),
                   GestureDetector(
                     onTap: () {
-                      Get.to(()=>ImagePickerScreen(gender:widget.genderss,category:widget.category,size:widget.category == "necklace"?
-                      necklaceValue:widget.category == "bracelet"?braceletValue :widget.category == "ring"?ringValue:widget.category == "bagJewel"?bagJewelValue:widget.category == "earrings"?earringValue:"none"
-                      
-                      
-                      ));
+                      Get.to(() => ImagePickerScreen(
+                          gender: widget.genderss,
+                          category: widget.category,
+                          size: widget.category == "necklace"
+                              ? necklaceValue
+                              : widget.category == "bracelet"
+                                  ? braceletValue
+                                  : widget.category == "ring"
+                                      ? ringValue
+                                      : widget.category == "bagJewel"
+                                          ? bagJewelValue
+                                          : widget.category == "earrings"
+                                              ? earringValue
+                                              : "none"));
                     },
                     child: Image.asset(
                       'assets/images/arrow-slider.png', // Replace with your image path
@@ -263,4 +248,3 @@ String earringValue="2mm";
     );
   }
 }
-

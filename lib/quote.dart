@@ -32,9 +32,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
       status: PaymentItemStatus.final_price,
     )
   ];
-  void onGooglePayResult(paymentResult) async {
- 
-  }
+  void onGooglePayResult(paymentResult) async {}
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
@@ -241,13 +239,12 @@ class _QuoteScreenState extends State<QuoteScreen> {
                           .doc(auth.FirebaseAuth.instance.currentUser!.uid)
                           .get()
                           .then((value) => value['total_points']);
-                      var newprice = 200+price;
+                      var newprice = 200 + price;
                       await FirebaseFirestore.instance
                           .collection("users")
                           .doc(auth.FirebaseAuth.instance.currentUser!.uid)
-                          .set(
-                              {"total_points": newprice}, SetOptions(merge: true));
-                              
+                          .set({"total_points": newprice},
+                              SetOptions(merge: true));
                     },
                     child: const Text('Ask for Quote'),
                   ),
