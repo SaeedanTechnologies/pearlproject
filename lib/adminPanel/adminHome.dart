@@ -203,16 +203,46 @@ class _AdminScreenState extends State<AdminScreen> {
               height: 10,
             ),
             const Text("Enter discount coupon"),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 height: 45,
                 child: TextField(
-                  decoration: InputDecoration(
+                  controller: couponController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(), hintText: "Coupon Name"),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text("Price"),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 45,
+                child: TextField(
+                  controller: couponPriceController,
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(), hintText: "\$"),
                 ),
               ),
             ),
+            ElevatedButton(
+                onPressed: () async {
+                  await FirebaseFirestore.instance
+                      .collection("Discount Codes")
+                      .doc()
+                      .set({
+                    "Discount Name": couponController.text.toString(),
+                    "Price": couponPriceController.text.toString()
+                  });
+                },
+                child: const Text(
+                  "Add coupon",
+                  style: TextStyle(color: Colors.black),
+                )),
             // Center(child: GestureDetector(
             //       onTap: ()async{
 
@@ -243,7 +273,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
               const Text('Price'),
               TextField(
-                controller: priceController,
+                controller: couponPriceController,
                 keyboardType: TextInputType.number,
                 //  maxLines: 5,
                 decoration: const InputDecoration(
@@ -304,4 +334,7 @@ class _AdminScreenState extends State<AdminScreen> {
       ),
     );
   }
+
+  final couponController = TextEditingController();
+  final couponPriceController = TextEditingController();
 }
