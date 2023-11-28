@@ -33,11 +33,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     )
   ];
   void onGooglePayResult(paymentResult) async {
-    var price = 100;
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(auth.FirebaseAuth.instance.currentUser!.uid)
-        .set({"total shopping": price});
+ 
   }
 
   TextEditingController nameController = TextEditingController();
@@ -74,7 +70,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: new Column(
+            content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const SizedBox(
@@ -251,6 +247,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                           .doc(auth.FirebaseAuth.instance.currentUser!.uid)
                           .set(
                               {"total_points": newprice}, SetOptions(merge: true));
+                              
                     },
                     child: const Text('Ask for Quote'),
                   ),
