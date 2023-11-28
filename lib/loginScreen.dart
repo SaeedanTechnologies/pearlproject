@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pearl/controller/userController.dart';
+import 'package:pearl/homeScreen.dart';
 import 'package:pearl/signupScreen.dart';
 import 'package:pearl/tabBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -45,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         // Handle sign-in failure (e.g., show an error message).
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Sign-in failed. Please check your credentials.'),
           ),
         );
@@ -59,8 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
         automaticallyImplyLeading: false,
       ),
       body: Padding(
@@ -70,31 +74,55 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 await userController.signInWithEmailAndPassword(
                     _emailController.text, _passwordController.text, context);
               },
-              child: Text('Sign In'),
+              child: const Text('Sign In'),
             ),
             ElevatedButton(
               onPressed: () {
                 Get.to(() => SignUpScreen());
               },
-              child: Text('SignUp'),
+              child: const Text('SignUp'),
+            ),
+            const SizedBox(
+              height: 20,
             ),
             GoogleAuthButton(
-              onPressed: () {_handleSignIn();},
+              onPressed: () {
+                _handleSignIn();
+              },
             ),
+            SizedBox(
+              width: 250,
+              child: SignInWithAppleButton(
+                onPressed: () async {
+                  final credential = await SignInWithApple.getAppleIDCredential(
+                    scopes: [
+                      AppleIDAuthorizationScopes.email,
+                      AppleIDAuthorizationScopes.fullName,
+                    ],
+                  );
+                  const SizedBox(
+                    height: 20,
+                  );
+
+                  // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                  // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -111,14 +139,36 @@ class _LoginScreenState extends State<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
   Future<void> _handleSignIn() async {
     try {
-      await _googleSignIn.signIn();
+      await _googleSignIn.signIn().then((value) => Get.to(() => HomeScreen()));
     } catch (error) {
       print(error);
     }
   }
+
+  _handleSignOut() async {
+    try {
+      await _googleSignIn.signOut();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  // _handleAppleSignIn() async {
+  //   try {
+  //     final result = await SignInWithApple.getAppleIDCredential(
+  //       scopes: [
+  //         AppleIDAuthorizationScopes.email,
+  //         AppleIDAuthorizationScopes.fullName,
+  //       ],
+  //     );
+
+  //     print(result);
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
 }
