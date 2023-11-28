@@ -1,14 +1,11 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pay/pay.dart';
 import 'package:pearl/controller/userController.dart';
-import 'package:pearl/user_model.dart';
 
 class QuoteScreen extends StatefulWidget {
   String? gender;

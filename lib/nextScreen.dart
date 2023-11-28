@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pearl/const/const.dart';
-import 'package:pearl/controller/controllerRef.dart';
 import 'package:pearl/pealSelect.dart';
 
 class NextScreen extends StatefulWidget {
