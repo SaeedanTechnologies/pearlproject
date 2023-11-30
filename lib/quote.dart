@@ -79,7 +79,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                     // _pickImage(ImageSource.gallery);
                     selectImages();
                     Navigator.pop(context);
-                    print("object");
+                    
                   },
                   child: const Row(
                     children: [

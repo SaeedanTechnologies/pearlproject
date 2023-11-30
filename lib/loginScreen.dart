@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pearl/controller/loginController.dart';
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pearl/controller/userController.dart';
 import 'package:pearl/homeScreen.dart';
@@ -19,45 +20,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   UserController userController = Get.put(UserController());
+  final loginController = Get.put(LoginController());
 
   String playerId = "";
-
-  Future<void> _signIn() async {
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String email = _emailController.text.trim();
-      final String password = _passwordController.text.trim();
-
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      if (userCredential.user != null) {
-        userController.uid = userCredential.user!.uid;
-        userController.update();
-
-        CollectionReference records =
-            FirebaseFirestore.instance.collection('users');
-
-        Get.to(SiteEngineer());
-      } else {
-        // Handle sign-in failure (e.g., show an error message).
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Sign-in failed. Please check your credentials.'),
-          ),
-        );
-      }
-    } catch (e) {
-      // Handle other errors (e.g., network issues, etc.).
-      print('Error signing in: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,12 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: _emailController,
+              controller: loginController.emailController,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: _passwordController,
+              controller: loginController.emailController,
               decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
@@ -86,7 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ElevatedButton(
               onPressed: () async {
                 await userController.signInWithEmailAndPassword(
-                    _emailController.text, _passwordController.text, context);
+                    loginController.emailController.text.trim().toString(),
+                    loginController.passwordController.text.trim().toString(),
+                    context);
               },
               child: const Text('Sign In'),
             ),
@@ -101,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             GoogleAuthButton(
               onPressed: () {
-                _handleSignIn();
+                loginController.googleSignIn();
               },
             ),
             SizedBox(
@@ -114,9 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       AppleIDAuthorizationScopes.fullName,
                     ],
                   );
-                  const SizedBox(
-                    height: 20,
-                  );
+                  
 
                   // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
                   // after they have been validated with Apple (see `Integration` section for more information on how to do this)
@@ -128,47 +94,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-    ],
-  );
-  Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn().then((value) => Get.to(() => HomeScreen()));
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  _handleSignOut() async {
-    try {
-      await _googleSignIn.signOut();
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  // _handleAppleSignIn() async {
-  //   try {
-  //     final result = await SignInWithApple.getAppleIDCredential(
-  //       scopes: [
-  //         AppleIDAuthorizationScopes.email,
-  //         AppleIDAuthorizationScopes.fullName,
-  //       ],
-  //     );
-
-  //     print(result);
-  //   } catch (error) {
-  //     print(error);
-  //   }
-  // }
 }
