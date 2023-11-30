@@ -1,14 +1,12 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pay/pay.dart';
 import 'package:pearl/controller/userController.dart';
-import 'package:pearl/user_model.dart';
 
 class QuoteScreen extends StatefulWidget {
   String? gender;
@@ -32,6 +30,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
       status: PaymentItemStatus.final_price,
     )
   ];
+
+  var applyCoupon = false.obs;
   void onGooglePayResult(paymentResult) async {}
 
   TextEditingController nameController = TextEditingController();
@@ -42,7 +42,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   TextEditingController genderController = TextEditingController();
   TextEditingController modelScreenshotController = TextEditingController();
   TextEditingController messageController = TextEditingController();
-
+  RxInt totalPrice = 200.obs;
   // Assuming you've previously obtained the 'user' object from Firebase authentication
   // and the Firestore 'orders' collection reference
 //   void submitOrder() async {
@@ -103,6 +103,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   }
 
   UserController userController = Get.put(UserController());
+
   XFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
   var imageFile;
@@ -119,6 +120,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     }
   }
 
+  final couponcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,19 +187,19 @@ class _QuoteScreenState extends State<QuoteScreen> {
                     border: const OutlineInputBorder(),
                   ),
                 ),
-                const Text('Model Screen Shot'),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await alerts();
-                      // Handle image upload
-                    },
-                    child: const Text('Upload Image'),
-                  ),
-                ),
+                // const Text('Model Screen Shot'),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     border: Border.all(color: Colors.black),
+                //   ),
+                //   child: ElevatedButton(
+                //     onPressed: () async {
+                //       await alerts();
+                //       // Handle image upload
+                //     },
+                //     child: const Text('Upload Image'),
+                //   ),
+                // ),
                 const Text('Message'),
                 TextField(
                   controller: messageController,
@@ -206,6 +208,103 @@ class _QuoteScreenState extends State<QuoteScreen> {
                     hintText: 'Enter your message',
                     border: OutlineInputBorder(),
                   ),
+                ),
+                // ignore: prefer_const_constructors
+                SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      applyCoupon.value = !applyCoupon.value;
+                    },
+                    child: const Text("Apply coupon")),
+                Obx(() => applyCoupon.value
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 40,
+                                child: TextField(
+                                  controller: couponcontroller,
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: "Enter coupon code"),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Column(
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      await FirebaseFirestore.instance
+                                          .collection("Discount Codes")
+                                          .where("Discount Name",
+                                              isEqualTo: couponcontroller.text
+                                                  .toString())
+                                          .get()
+                                          .then((data) async {
+                                        if (data.docs.isNotEmpty) {
+                                          totalPrice.value = totalPrice.value -
+                                              int.parse(
+                                                  data.docs.first['Price']);
+
+                                          var snapshot = await FirebaseFirestore
+                                              .instance
+                                              .collection("users")
+                                              .doc(auth.FirebaseAuth.instance
+                                                  .currentUser!.uid)
+                                              .get();
+
+                                          var price = snapshot['total_points'];
+
+                                          price = totalPrice.value + price;
+                                          await FirebaseFirestore.instance
+                                              .collection("users")
+                                              .doc(auth.FirebaseAuth.instance
+                                                  .currentUser!.uid)
+                                              .set({"total_points": price},
+                                                  SetOptions(merge: true));
+                                          var count = data.docs.first['count'];
+                                          if (count == 0) {
+                                            Fluttertoast.showToast(
+                                                msg: "Coupon is expired",
+                                                backgroundColor: Colors.red);
+                                          } else {
+                                            FirebaseFirestore.instance
+                                                .collection("Discount Codes")
+                                                .doc(data.docs.first.id)
+                                                .update({
+                                              "count": FieldValue.increment(-1)
+                                            });
+                                          }
+                                        } else {}
+                                      });
+                                    },
+                                    child: const Text("Apply")),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox.shrink()),
+
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    const Text("Total Price:"),
+                    Obx(() => Text(
+                          totalPrice.value.toString(),
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        )),
+                  ],
                 ),
                 GooglePayButton(
                   paymentConfigurationAsset:
@@ -219,36 +318,58 @@ class _QuoteScreenState extends State<QuoteScreen> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
+                // Container(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     onPressed: () async {
+                //       // submitOrder();
+                //       // await userController.uploadFilesForOrder(
+                //       //     _imageFile,
+                //       //     context,
+                //       //     nameController.text,
+                //       //     phoneNumberController.text,
+                //       //     emailController.text,
+                //       //     widget.gender!,
+                //       //     widget.category!,
+                //       //     widget.size!,
+                //       //     messageController.text);
+                //       var price = await FirebaseFirestore.instance
+                //           .collection("users")
+                //           .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                //           .get()
+                //           .then((value) => value['total_points']);
+                //       totalPrice.value =totalPrice.value+ int.parse(price);
+                //       await FirebaseFirestore.instance
+                //           .collection("users")
+                //           .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                //           .set({"total_points": totalPrice.value},
+                //               SetOptions(merge: true));
+                //     },
+                //     child: const Text('Ask for Quote'),
+                //   ),
+                // ),
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      // submitOrder();
-                      // await userController.uploadFilesForOrder(
-                      //     _imageFile,
-                      //     context,
-                      //     nameController.text,
-                      //     phoneNumberController.text,
-                      //     emailController.text,
-                      //     widget.gender!,
-                      //     widget.category!,
-                      //     widget.size!,
-                      //     messageController.text);
-                      var price = await FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(auth.FirebaseAuth.instance.currentUser!.uid)
-                          .get()
-                          .then((value) => value['total_points']);
-                      var newprice = 200 + price;
-                      await FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(auth.FirebaseAuth.instance.currentUser!.uid)
-                          .set({"total_points": newprice},
-                              SetOptions(merge: true));
+                      // Ask for Quote logic...
+                      // var priceSnapshot = await FirebaseFirestore.instance
+                      //     .collection("users")
+                      //     .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                      //     .get();
+                      // var price = priceSnapshot['total_points'];
+                      // if (price != null && price is int) {
+                      //   totalPrice.value = totalPrice.value + price;
+                      //   await FirebaseFirestore.instance
+                      //       .collection("users")
+                      //       .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                      //       .set({"total_points": totalPrice.value},
+                      //           SetOptions(merge: true));
+                      // }
                     },
                     child: const Text('Ask for Quote'),
                   ),
-                ),
+                )
               ],
             ),
           ),
