@@ -1,26 +1,66 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pearl/controller/userController.dart';
-import 'package:pearl/homeScreen.dart';
-import 'package:pearl/loginScreen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pearl/userSide/controller/userController.dart';
+import 'package:pearl/userSide/views/loginScreen.dart';
+import 'package:pearl/userSide/views/tabBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SignUpScreen extends StatefulWidget {
+class AuthController extends GetxController {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
-}
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
 
-class _SignUpScreenState extends State<SignUpScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  UserController userController = Get.put(UserController());
-  Future<void> _signIn() async {
+  final firestore = FirebaseFirestore.instance;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final genderController = TextEditingController();
+  final nameController = TextEditingController();
+  final userController = Get.put(UserController());
+  Future<void> signIn(context) async {
     try {
-      final String email = _emailController.text.trim();
-      final String password = _passwordController.text.trim();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: emailController.text.trim().toString(),
+        password: emailController.text.trim().toString(),
+      );
 
+      if (userCredential.user != null) {
+        userController.uid = userCredential.user!.uid;
+        userController.update();
+
+        // CollectionReference records = firestore.collection('users');
+
+        Get.to(() => TabBars());
+      } else {
+        // Handle sign-in failure (e.g., show an error message).
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Sign-in failed. Please check your credentials.'),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle other errors (e.g., network issues, etc.).
+      print('Error signing in: $e');
+    }
+  }
+
+  Future<void> signUp({
+    required String name,
+    required String email,
+    required String password,
+    required context,
+    required String gender,
+  }) async {
+    try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -84,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } else {
         // Handle sign-in failure (e.g., show an error message).
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Sign-in failed. Please check your credentials.'),
           ),
         );
@@ -95,42 +135,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Signup'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _signIn,
-              child: Text('SignUp'),
-            ),
-          ],
-        ),
-      ),
-    );
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+    ],
+  );
+  Future<void> googleSignIn() async {
+    try {
+      await _googleSignIn.signIn().then((value) => Get.to(() => TabBars()));
+    } catch (error) {
+      print(error);
+    }
   }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  _handleSignOut() async {
+    try {
+      await _googleSignIn.signOut();
+    } catch (error) {
+      print(error);
+    }
   }
 }

@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pearl/const/const.dart';
-import 'package:pearl/controller/controllerRef.dart';
-import 'package:pearl/loginScreen.dart';
-import 'package:pearl/nextScreen.dart';
+import 'package:pearl/const/colors.dart';
+import 'package:pearl/userSide/controller/controllerRef.dart';
+import 'package:pearl/userSide/views/loginScreen.dart';
+import 'package:pearl/userSide/views/nextScreen.dart';
 
 class CategoryScreen extends StatefulWidget {
     String? genderss;

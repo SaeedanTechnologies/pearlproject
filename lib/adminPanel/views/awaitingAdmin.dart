@@ -9,13 +9,15 @@ import 'package:get/get.dart';
 
 import 'package:image_picker/image_picker.dart';
 
+import '../../userSide/controller/controllerRef.dart';
 
-class CustomerApproval extends StatefulWidget {
+
+class AdminApproval extends StatefulWidget {
   @override
-  State<CustomerApproval> createState() => _CustomerApprovalState();
+  State<AdminApproval> createState() => _AdminApprovalState();
 }
 
-class _CustomerApprovalState extends State<CustomerApproval> {
+class _AdminApprovalState extends State<AdminApproval> {
 //   Future validateAndSubmit(String customerId,String customerName,String id) async{
 
 //      EasyLoading.show();
@@ -41,7 +43,7 @@ class _CustomerApprovalState extends State<CustomerApproval> {
  
  
  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
-
+TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +68,8 @@ class _CustomerApprovalState extends State<CustomerApproval> {
           StreamBuilder<QuerySnapshot>(
                  stream:  
                              FirebaseFirestore.instance
-                                .collection('orders').
-                                where("userid",isEqualTo:_firebaseAuth.currentUser!.uid)
+                                .collection('orders')
+                               .where("Qoutation",isEqualTo: false)
                                 
                                 .snapshots(),
                  
@@ -93,11 +95,12 @@ class _CustomerApprovalState extends State<CustomerApproval> {
                                           var userId = documents[index]["userid"];
                                           var price = documents[index]["price"];
                                       
-                                        
+                                        var modelScreenshot = documents[index]["modelScreenshot"];
                                           var quotation = documents[index]["Qoutation"];
                                               var accessoryType = documents[index]["accessoryType"];
                                                 var measure = documents[index]["measure"];
-                                        
+                                                var docId = documents[index]["docId"];
+                                        final textController = TextEditingController();
                                 
                    return     Padding(
                         padding: const EdgeInsets.all(4.0),
@@ -113,25 +116,54 @@ class _CustomerApprovalState extends State<CustomerApproval> {
                            
                               ListTile(
                                
-                                title: Text("Your Order ${accessoryType} with size {$measure} is placed successfully " ), 
+                                title: Text("Your Order ${accessoryType} with size {$measure} is received" ), 
                                 // trailing: PickBy == "" ? Text("Add to List",style: TextStyle(color: Colors.green),) :  null,
-                                subtitle:quotation ==  false ? Text("Waiting for Quotation" ) :Text("The price of this prodcut is ${price}"),
+                                subtitle:
+                                   TextField(
+                  controller: textController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "write your Qoutation"
+                  ),
+                ),
+               
+                                //quotation ==  false ? Text("Waiting for Quotation" ) :Text("The price of this prodcut is ${price}"),
+trailing: GestureDetector(
+onTap: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ImageDialog(imageUrl:modelScreenshot);
+            },
+          );
+        },  
+  child:   Container(
+  
+    height: 100,
+  
+    width: 50,
+    decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(modelScreenshot),fit: BoxFit.cover)),
+  
+   
+    
+    ),
+),
                               ),
                                           
                          
-                                  quotation == false ?
-                                  Text(""):
+                            
                                      ElevatedButton(
                           onPressed: () async{
                     // sendNotification();
                     // await alerts(customerId,cusName,ids);
                       
-                 //   await    validateAndSubmit(customerId,cusName,ids);
+                   await    userController.sendQuotation(textController.text,ids);
             // await  salesPersonController.updateToken(ids,userController.userName!);
                   //  Get.to(()=>NotificationOpenedHandler()); 
                             print('Button Pressed!');
                           },
-                          child: Text('Pay'),
+                          child: Text('Send Quotation'),
                                           )
                                           
                                          
@@ -169,6 +201,29 @@ class _CustomerApprovalState extends State<CustomerApproval> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+class ImageDialog extends StatelessWidget {
+  final String imageUrl;
+
+  ImageDialog({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.network(imageUrl), // Display the image
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text('Close'),
+          ),
+        ],
       ),
     );
   }

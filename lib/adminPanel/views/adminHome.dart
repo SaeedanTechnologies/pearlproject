@@ -6,10 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pearl/adminPanel/awaitingAdmin.dart';
-import 'package:pearl/loginScreen.dart';
+import 'package:pearl/adminPanel/views/awaitingAdmin.dart';
+import 'package:pearl/userSide/views/loginScreen.dart';
 
-import '../controller/userController.dart';
+import '../../userSide/controller/userController.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});

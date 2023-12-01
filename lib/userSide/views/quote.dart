@@ -6,7 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pay/pay.dart';
-import 'package:pearl/controller/userController.dart';
+import 'package:pearl/userSide/controller/userController.dart';
+import 'package:pearl/utils/utils.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class QuoteScreen extends StatefulWidget {
   String? gender;
@@ -42,7 +44,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   TextEditingController genderController = TextEditingController();
   TextEditingController modelScreenshotController = TextEditingController();
   TextEditingController messageController = TextEditingController();
-  RxInt totalPrice = 200.obs;
+  RxInt totalPrice = 50.obs;
   // Assuming you've previously obtained the 'user' object from Firebase authentication
   // and the Firestore 'orders' collection reference
 //   void submitOrder() async {
@@ -79,7 +81,6 @@ class _QuoteScreenState extends State<QuoteScreen> {
                     // _pickImage(ImageSource.gallery);
                     selectImages();
                     Navigator.pop(context);
-                    
                   },
                   child: const Row(
                     children: [
@@ -249,26 +250,6 @@ class _QuoteScreenState extends State<QuoteScreen> {
                                           .get()
                                           .then((data) async {
                                         if (data.docs.isNotEmpty) {
-                                          totalPrice.value = totalPrice.value -
-                                              int.parse(
-                                                  data.docs.first['Price']);
-
-                                          var snapshot = await FirebaseFirestore
-                                              .instance
-                                              .collection("users")
-                                              .doc(auth.FirebaseAuth.instance
-                                                  .currentUser!.uid)
-                                              .get();
-
-                                          var price = snapshot['total_points'];
-
-                                          price = totalPrice.value + price;
-                                          await FirebaseFirestore.instance
-                                              .collection("users")
-                                              .doc(auth.FirebaseAuth.instance
-                                                  .currentUser!.uid)
-                                              .set({"total_points": price},
-                                                  SetOptions(merge: true));
                                           var count = data.docs.first['count'];
                                           if (count == 0) {
                                             Fluttertoast.showToast(
@@ -281,8 +262,57 @@ class _QuoteScreenState extends State<QuoteScreen> {
                                                 .update({
                                               "count": FieldValue.increment(-1)
                                             });
+                                            totalPrice.value = totalPrice
+                                                    .value -
+                                                int.parse(
+                                                    data.docs.first['Price']);
+
+                                            var snapshot =
+                                                await FirebaseFirestore.instance
+                                                    .collection("users")
+                                                    .doc(auth
+                                                        .FirebaseAuth
+                                                        .instance
+                                                        .currentUser!
+                                                        .uid)
+                                                    .get();
+
+                                            var points =
+                                                snapshot['total_points'];
+
+                                            points = totalPrice.value + points;
+                                            await FirebaseFirestore.instance
+                                                .collection("users")
+                                                .doc(auth.FirebaseAuth.instance
+                                                    .currentUser!.uid)
+                                                .set({"total_points": points},
+                                                    SetOptions(merge: true));
+
+                                            await FirebaseFirestore.instance
+                                                .collection("offers")
+                                                .where("points",
+                                                    isEqualTo: points)
+                                                .get()
+                                                .then((offers) async {
+                                              if (offers.docs.isNotEmpty) {
+                                                await FirebaseFirestore.instance
+                                                    .collection("users")
+                                                    .doc(auth
+                                                        .FirebaseAuth
+                                                        .instance
+                                                        .currentUser!
+                                                        .uid)
+                                                    .set({
+                                                  "offers":
+                                                      offers.docs.first['offer']
+                                                }, SetOptions(merge: true));
+                                              }
+                                            });
                                           }
-                                        } else {}
+                                        } else {
+                                          Utils.fluttertoast(
+                                              msg: "Coupon not exist.");
+                                        }
                                       });
                                     },
                                     child: const Text("Apply")),
@@ -353,19 +383,56 @@ class _QuoteScreenState extends State<QuoteScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       // Ask for Quote logic...
-                      // var priceSnapshot = await FirebaseFirestore.instance
-                      //     .collection("users")
-                      //     .doc(auth.FirebaseAuth.instance.currentUser!.uid)
-                      //     .get();
-                      // var price = priceSnapshot['total_points'];
-                      // if (price != null && price is int) {
-                      //   totalPrice.value = totalPrice.value + price;
-                      //   await FirebaseFirestore.instance
-                      //       .collection("users")
-                      //       .doc(auth.FirebaseAuth.instance.currentUser!.uid)
-                      //       .set({"total_points": totalPrice.value},
-                      //           SetOptions(merge: true));
-                      // }
+                      var priceSnapshot = await FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                          .get();
+                      var points = priceSnapshot['total_points'];
+
+                      points = totalPrice.value + points;
+                      await FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                          .set({"total_points": points},
+                              SetOptions(merge: true));
+                      if (points >= 100) {
+                        await FirebaseFirestore.instance
+                            .collection("offers")
+                            .where("points", isGreaterThanOrEqualTo: points)
+                            .get()
+                            .then((offers) async {
+                          if (offers.docs.isNotEmpty) {
+                            await FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(
+                                    auth.FirebaseAuth.instance.currentUser!.uid)
+                                .set({
+                              "offers": offers.docs.first['offer']
+                              // offers.docs.first['points'] >= 100 &&
+                              //         offers.docs.first['points'] < 200
+                              //     ?
+                              // : offers.docs.first['points'] >= 200 &&
+                              //         offers.docs.first['points'] < 300
+                              //     ? offers.docs.first['offer']
+                              //     : offers.docs.first['points'] >= 300 &&
+                              //             offers.docs.first['points'] < 400
+                              //         ? offers.docs.first['offer']
+                              //         : offers.docs.first['points'] >=
+                              //                     400 &&
+                              //                 offers.docs.first['points'] <
+                              //                     500
+                              //             ? offers.docs.first['offer']
+                              //             : offers.docs.first['points'] >=
+                              //                         500 &&
+                              //                     offers.docs.first[
+                              //                             'points'] <=
+                              //                         600
+                              //                 ? offers.docs.first['offer']
+                              //                 : ""
+                            }, SetOptions(merge: true));
+                          }
+                        });
+                      }
                     },
                     child: const Text('Ask for Quote'),
                   ),

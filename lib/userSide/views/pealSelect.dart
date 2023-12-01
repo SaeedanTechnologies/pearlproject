@@ -319,7 +319,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pearl/quote.dart';
+import 'package:pearl/userSide/views/quote.dart';
 
 // ignore: must_be_immutable
 class ImagePickerScreen extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pearl/const/const.dart';
-import 'package:pearl/controller/controllerRef.dart';
-import 'package:pearl/pealSelect.dart';
+import 'package:pearl/const/colors.dart';
+import 'package:pearl/userSide/controller/controllerRef.dart';
+import 'package:pearl/userSide/views/pealSelect.dart';
 
 class NextScreen extends StatefulWidget {
   String? genderss;

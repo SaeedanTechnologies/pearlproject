@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pearl/categoryScreen.dart';
-import 'package:pearl/const/const.dart';
-import 'package:pearl/controller/controllerRef.dart';
-import 'package:pearl/loginScreen.dart';
-import 'package:pearl/marketplace.dart';
-import 'package:pearl/nextScreen.dart';
+import 'package:pearl/userSide/views/categoryScreen.dart';
+import 'package:pearl/const/colors.dart';
+import 'package:pearl/userSide/controller/controllerRef.dart';
+import 'package:pearl/userSide/views/loginScreen.dart';
+import 'package:pearl/userSide/views/marketplace.dart';
+import 'package:pearl/userSide/views/nextScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Home Screen'),
+        title: const Text('Home Screen'),
         actions: [
            ElevatedButton(
                 onPressed: ()async {
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
          //          userController.sendNotificationToPlayer("6fbbc31d-fb5d-4d8f-bc0b-5fd4aeb2d9b8", "Your notification message");
               //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
                 },
-                child: Text('Logout'),
+                child: const Text('Logout'),
               ),
              
        // Text(_firebaseAuth.currentUser!.uid)
@@ -44,12 +44,12 @@ class _HomeScreenState extends State<HomeScreen> {
          //          userController.sendNotificationToPlayer("6fbbc31d-fb5d-4d8f-bc0b-5fd4aeb2d9b8", "Your notification message");
               //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
                 },
-                child: Text('Marketplace'),
+                child: const Text('Marketplace'),
               ),
         ],
       ),
       body: Container(
-         decoration: BoxDecoration(
+         decoration: const BoxDecoration(
           image: DecorationImage(image: AssetImage("assets/images/flower.jpg"),fit: BoxFit.cover)
         ),
         child: Center(
@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'This command is for',
                 style: TextStyle(fontStyle: FontStyle.italic,color: purpleColor),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -73,16 +73,16 @@ class _HomeScreenState extends State<HomeScreen> {
                    
                      
                   }),
-                  Text('Male'),
+                  const Text('Male'),
                   Radio(value: 'female', groupValue: genders, onChanged: (hm) {
                        setState(() {
                      genders = hm;  
                     });
                   }),
-                  Text('Female'),
+                  const Text('Female'),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // ElevatedButton(
               //   onPressed: () {
               // //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Confirm"),
+                  const Text("Confirm"),
                   GestureDetector(
                     onTap: () {
                       Get.to(()=>CategoryScreen(genderss:genders));

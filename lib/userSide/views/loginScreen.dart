@@ -1,17 +1,14 @@
 import 'package:auth_buttons/auth_buttons.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:pearl/controller/loginController.dart';
+import 'package:pearl/const/colors.dart';
+import 'package:pearl/userSide/controller/authController.dart';
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:pearl/controller/userController.dart';
-import 'package:pearl/homeScreen.dart';
-import 'package:pearl/signupScreen.dart';
-import 'package:pearl/tabBar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pearl/userSide/controller/userController.dart';
+import 'package:pearl/userSide/views/signupScreen.dart';
+import 'package:pearl/widgets/customtextfield.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:velocity_x/velocity_x.dart';
 // import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   UserController userController = Get.put(UserController());
-  final loginController = Get.put(LoginController());
+  final loginController = Get.put(AuthController());
 
   String playerId = "";
 
@@ -38,17 +35,17 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: loginController.emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: loginController.emailController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
+            customeTextField(
+                hinttext: "email",
+                controller: loginController.emailController,
+                icon: Icons.email),
+            10.heightBox,
+            customeTextField(
+                hinttext: "Password",
+                controller: loginController.passwordController,
+                icon: Icons.lock,
+                obsecure: true),
+            10.heightBox,
             ElevatedButton(
               onPressed: () async {
                 await userController.signInWithEmailAndPassword(
@@ -82,7 +79,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       AppleIDAuthorizationScopes.fullName,
                     ],
                   );
-                  
 
                   // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
                   // after they have been validated with Apple (see `Integration` section for more information on how to do this)
