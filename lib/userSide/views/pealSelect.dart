@@ -1,7 +1,6 @@
 // import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 // class ImageGridScreen extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
@@ -316,8 +315,10 @@
 //   }
 // }
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pearl/userSide/views/quote.dart';
 
@@ -381,10 +382,16 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                           child: Stack(
                             alignment: Alignment.topRight,
                             children: [
-                              DragTarget<String>(
-                                onAccept: (data) => setState(() {
-                                  image1 = data;
-                                }),
+                              DragTarget(
+                                
+                                
+                                onAccept: (data) async{
+                                 
+                                  setState(() {
+                                    image1 = data;
+
+                                  });
+                                },
                                 builder: (builder, _, __) => Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
@@ -2044,7 +2051,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                                         ),
                                       ]),
                                     )
-                                  : Center(),
+                                  : const Center(),
             ),
           ),
           StreamBuilder<QuerySnapshot>(
@@ -2062,30 +2069,45 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                 }
                 final pearlImages = snapshot.data!.docs
                     //  .where((doc) => doc['category'] == 'pearl')
-                    .map((doc) => doc['producImage'] as String)
+                    .map((doc) => doc['pearlImage'] as String)
                     .toList();
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      pearlImages.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Draggable(
-                          data: pearlImages[index],
-                          feedback: CircleAvatar(
-                            child: Image.network(
-                              pearlImages[index],
-                            ),
-                          ),
-                          childWhenDragging: CircleAvatar(
-                            backgroundImage: NetworkImage(pearlImages[index]),
-                          ),
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(pearlImages[index]),
-                          ),
-                        ),
-                      ),
-                    ));
+                return SizedBox(
+                  height: 60.h,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: pearlImages.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: snapshot.data!.docs[index]['stock'] > 0
+                              ? Draggable(
+                                  onDragCompleted: () async {
+                                    await FirebaseFirestore.instance
+                                        .collection("productImages")
+                                        .doc(snapshot.data!.docs[index].id)
+                                        .update({
+                                      "stock": FieldValue.increment(-1)
+                                    });
+                                  },
+                                  data: pearlImages[index],
+                                  feedback: CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                      pearlImages[index],
+                                    ),
+                                  ),
+                                  childWhenDragging: CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        pearlImages[index]),
+                                  ),
+                                  child: CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        pearlImages[index]),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        );
+                      }),
+                );
               }),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

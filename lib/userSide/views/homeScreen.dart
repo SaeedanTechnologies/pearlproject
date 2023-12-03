@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
        // Text(_firebaseAuth.currentUser!.uid)
          ElevatedButton(
                 onPressed: ()async {
-                   Get.to(()=> ImageGridScreen());
+                   Get.to(()=> CatalogScreen());
          //          userController.sendNotificationToPlayer("6fbbc31d-fb5d-4d8f-bc0b-5fd4aeb2d9b8", "Your notification message");
               //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
                 },

@@ -4,11 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pay/pay.dart';
 import 'package:pearl/userSide/controller/userController.dart';
 import 'package:pearl/utils/utils.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class QuoteScreen extends StatefulWidget {
   String? gender;
@@ -79,7 +77,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 GestureDetector(
                   onTap: () {
                     // _pickImage(ImageSource.gallery);
-                    selectImages();
+                    // selectImages();
                     Navigator.pop(context);
                   },
                   child: const Row(
@@ -105,21 +103,21 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
   UserController userController = Get.put(UserController());
 
-  XFile? _imageFile;
-  final ImagePicker _picker = ImagePicker();
-  var imageFile;
-  void selectImages() async {
-    final XFile? images = await _picker.pickImage(source: ImageSource.gallery);
+  // XFile? _imageFile;
+  // final ImagePicker _picker = ImagePicker();
+  // var imageFile;
+  // void selectImages() async {
+  //   final XFile? images = await _picker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      _imageFile = images!;
-    });
+  //   setState(() {
+  //     _imageFile = images!;
+  //   });
 
-    if (images != null) {
-      userController.imageFile = images.path == null ? "" : images.path;
-      userController.update();
-    }
-  }
+  //   if (images != null) {
+  //     userController.imageFile = images.path == null ? "" : images.path;
+  //     userController.update();
+  //   }
+  // }
 
   final couponcontroller = TextEditingController();
   @override

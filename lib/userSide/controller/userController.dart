@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:image_picker/image_picker.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pearl/adminPanel/views/adminScreen.dart';
+
 import 'package:pearl/userSide/views/tabBar.dart';
 import 'package:pearl/userSide/model/user_model.dart';
 import 'package:http/http.dart' as http;
@@ -28,7 +29,7 @@ class UserController extends GetxController {
 
 //   action = prefs.getString('action');
 
-  var imageFile;
+  
   String uid = "";
 
   String inOut = "";
@@ -54,62 +55,7 @@ class UserController extends GetxController {
     return rndnumber;
   }
 
-  Future<UploadTask?> uploadFilesPassport(
-      XFile? files, context, String message, String price, String cat) async {
-    //await getIDo();
-    String rand = await tenNumberGenerated();
-//  var uniqueKeys = firebaseRef.collection("users");
-//     var uniqueKey = firebaseRef.collection("users");
-    if (files == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No file was selected'),
-        ),
-      );
-
-      return null;
-    }
-
-    UploadTask uploadTask;
-
-    // Create a Reference to the file
-    Reference ref = FirebaseStorage.instance
-        .ref()
-        .child('productImage')
-        .child('${rand}.jpg');
-
-    final metadata = SettableMetadata(
-      contentType: 'image/jpeg',
-      customMetadata: {'picked-file-path': files.path},
-    );
-    EasyLoading.show();
-
-    if (kIsWeb) {
-      uploadTask = ref.putData(await files.readAsBytes(), metadata);
-    } else {
-      uploadTask = ref.putFile(io.File(files.path), metadata);
-
-      await uploadTask.whenComplete(() async {
-        var uploadpaths = await uploadTask.snapshot.ref.getDownloadURL();
-        FirebaseFirestore.instance.collection("productImages").add({
-          "producImage": uploadpaths,
-          "description": message,
-          "price": price,
-          "category": cat
-        });
-        //  await SendMailss();
-        Get.snackbar("Uploaded", "Upload successfully");
-        //  Get.to(HomePage());
-        // await   sendEmail();
-        EasyLoading.dismiss();
-        // Get.to(HomePage());
-      });
-    }
-
-    // await ref.getDownloadURL().then((value) => updataIdCard(value));
-
-    return Future.value(uploadTask);
-  }
+  
 
   Future<UploadTask?> uploadFilesForOrder(
       XFile? files,

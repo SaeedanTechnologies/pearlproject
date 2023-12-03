@@ -24,7 +24,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Category Screen'),
+        title: const Text('Category Screen'),
         actions: [
            ElevatedButton(
                 onPressed: ()async {
@@ -32,13 +32,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   
               //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
                 },
-                child: Text('Logout'),
+                child: const Text('Logout'),
               ),
         
         ],
       ),
       body: Container(
-         decoration: BoxDecoration(
+         decoration: const BoxDecoration(
           image: DecorationImage(image: AssetImage("assets/images/flower.jpg"),fit: BoxFit.cover)
         ),
         child: Center(
@@ -49,7 +49,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 'Select Category',
                 style: TextStyle(fontStyle: FontStyle.italic,color: purpleColor),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -65,7 +65,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                        
                          
                       }),
-                               Text('Necklace'),
+                               const Text('Necklace'),
                     ],
                   ),
          
@@ -77,7 +77,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                          category = hm;  
                         });
                       }),
-                           Text('Bracelet'),
+                           const Text('Bracelet'),
                     ],
                   ),
              
@@ -90,7 +90,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         });
                   }),
                   
-                   Text('Ring'),
+                   const Text('Ring'),
                      ],
                    ),
                  
@@ -103,7 +103,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         });
                   }),
                  
-                   Text('Bag Jewel'),
+                   const Text('Bag Jewel'),
                      ],
                    ),
                  
@@ -115,13 +115,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                          category = hm;  
                         });
                   }),
-                    Text('Earrings'),
+                    const Text('Earrings'),
                      ],
                    ),
                 
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // ElevatedButton(
               //   onPressed: () {
               // //    Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
@@ -132,7 +132,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Confirm"),
+                  const Text("Confirm"),
                   GestureDetector(
                     onTap: () {
                       Get.to(()=>NextScreen(genderss:widget.genderss,category:category));

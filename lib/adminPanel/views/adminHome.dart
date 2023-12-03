@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:pearl/adminPanel/controllers/uploadPearlController.dart';
 import 'package:pearl/adminPanel/views/awaitingAdmin.dart';
 import 'package:pearl/userSide/views/loginScreen.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../userSide/controller/userController.dart';
 
@@ -51,43 +51,19 @@ class AdminScreen extends StatefulWidget {
 //     });
 
 // }
-List<DropdownMenuItem<String>> get category {
-  List<DropdownMenuItem<String>> menuItems = [
-    const DropdownMenuItem(value: "ring", child: Text("ring")),
-    const DropdownMenuItem(value: "bracelet", child: Text("bracelet")),
-  ];
-  return menuItems;
-}
+// List<DropdownMenuItem<String>> get category {
+//   List<DropdownMenuItem<String>> menuItems = [
+//     const DropdownMenuItem(value: "ring", child: Text("ring")),
+//     const DropdownMenuItem(value: "bracelet", child: Text("bracelet")),
+//   ];
+//   return menuItems;
+// }
 
-String cat = "ring";
+// String cat = "ring";
 
 class _AdminScreenState extends State<AdminScreen> {
-  final ImagePicker _picker = ImagePicker();
-  var imageFile;
-  void selectImages() async {
-    final XFile? images = await _picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _imageFile = images!;
-    });
-
-    if (images != null) {
-      userController.imageFile = images.path == null ? "" : images.path;
-      userController.update();
-    }
-  }
-
-  Future<void>? _clear() {
-    setState(
-      () => _imageFile = null,
-    );
-  }
-
-  XFile? _imageFile;
   UserController userController = Get.put(UserController());
-
-  TextEditingController messageController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
+  final uploadPearlController = Get.put(UploadPearlsController());
 
   Future<void>? alerts() {
     showDialog(
@@ -103,9 +79,8 @@ class _AdminScreenState extends State<AdminScreen> {
                 GestureDetector(
                   onTap: () {
                     // _pickImage(ImageSource.gallery);
-                    selectImages();
+                    uploadPearlController.selectImages();
                     Navigator.pop(context);
-                    print("object");
                   },
                   child: const Row(
                     children: [
@@ -132,6 +107,7 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: [
@@ -188,8 +164,7 @@ class _AdminScreenState extends State<AdminScreen> {
             image: DecorationImage(
                 image: AssetImage("assets/images/flower.jpg"),
                 fit: BoxFit.cover)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: [
             ElevatedButton(
               onPressed: () async {
@@ -202,47 +177,7 @@ class _AdminScreenState extends State<AdminScreen> {
             const SizedBox(
               height: 10,
             ),
-            const Text("Enter discount coupon"),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 45,
-                child: TextField(
-                  controller: couponController,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), hintText: "Coupon Name"),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text("Price"),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 45,
-                child: TextField(
-                  controller: couponPriceController,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), hintText: "\$"),
-                ),
-              ),
-            ),
-            ElevatedButton(
-                onPressed: () async {
-                  await FirebaseFirestore.instance
-                      .collection("Discount Codes")
-                      .doc()
-                      .set({
-                    "Discount Name": couponController.text.toString(),
-                    "Price": couponPriceController.text.toString()
-                  });
-                },
-                child: const Text(
-                  "Add coupon",
-                  style: TextStyle(color: Colors.black),
-                )),
+
             // Center(child: GestureDetector(
             //       onTap: ()async{
 
@@ -259,82 +194,120 @@ class _AdminScreenState extends State<AdminScreen> {
               height: 10,
             ),
 
-            if (_imageFile != null) ...[
-              Image.file(width: 200, height: 200, File(_imageFile!.path)),
-              const Text('Message'),
-              TextField(
-                controller: messageController,
-                maxLines: 5,
-                decoration: const InputDecoration(
-                  hintText: 'Enter your message',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+            Obx(
+              () => uploadPearlController.imagePath.value.isNotEmpty
+                  ? Column(
+                      children: [
+                        Image.file(
+                            width: 200,
+                            height: 200,
+                            File(uploadPearlController.imagePath.value)),
+                        "PearlName".text.black.make(),
+                        TextField(
+                          controller: uploadPearlController.pearlNameController,
+                  
+                          //  maxLines: 5,
+                          decoration: const InputDecoration(
+                            hintText: 'Pearl Name...',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        "Description".text.black.make(),
+                        TextField(
+                          controller: uploadPearlController.messageController,
+                          maxLines: 5,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter pearl description',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
 
-              const Text('Price'),
-              TextField(
-                controller: couponPriceController,
-                keyboardType: TextInputType.number,
-                //  maxLines: 5,
-                decoration: const InputDecoration(
-                  hintText: 'Enter your price',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+                        "Price".text.black.make(),
+                        TextField(
+                          controller: uploadPearlController.priceController,
+                          keyboardType: TextInputType.number,
+                          //  maxLines: 5,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter pearl price',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        "Stock".text.black.make(),
+                        TextField(
+                          controller: uploadPearlController.stockController,
+                          keyboardType: TextInputType.number,
+                          //  maxLines: 5,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter pearl stock',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
 
-              DropdownButton(
-                  value: cat,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      cat = newValue!;
-                    });
-                  },
-                  items: category),
+                        // DropdownButton(
+                        //     focusColor: blackColor,
+                        //     dropdownColor: blackColor,
+                        //     value: cat,
+                        //     onChanged: (String? newValue) {
+                        //       setState(() {
+                        //         cat = newValue!;
+                        //       });
+                        //     },
+                        //     items: category),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // ElevatedButton(
-                  //   child: Icon(Icons.crop),
-                  //   onPressed: _cropImage,
-                  // ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
-                    ),
-                    onPressed: _clear,
-                    child: const Icon(
-                      Icons.refresh,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
-                    ),
-                    child: const Icon(
-                      Icons.upload_file,
-                    ),
-                    onPressed: () async {
-                      await userController.uploadFilesPassport(
-                          _imageFile,
-                          context,
-                          messageController.text,
-                          priceController.text,
-                          cat);
-                    },
-                  ),
-                ],
-              ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            // ElevatedButton(
+                            //   child: Icon(Icons.crop),
+                            //   onPressed: _cropImage,
+                            // ),
+                            // ElevatedButton(
+                            //   style: ElevatedButton.styleFrom(
+                            //     primary: Colors.black,
+                            //   ),
+                            //   onPressed: _clear,
+                            //   child: const Icon(
+                            //     Icons.refresh,
+                            //   ),
+                            // ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.black,
+                              ),
+                              child: const Icon(
+                                Icons.upload_file,
+                              ),
+                              onPressed: () async {
+                                await uploadPearlController.uploadNewPearl(
+                                    uploadPearlController.selectedImage.value,
+                                    context,
+                                    uploadPearlController.messageController.text
+                                        .trim()
+                                        .toString(),
+                                    int.parse(uploadPearlController
+                                        .priceController.text
+                                        .trim()),
+                                    int.parse(uploadPearlController
+                                        .stockController.text
+                                        .trim()),
+                                    uploadPearlController
+                                        .pearlNameController.text
+                                        .trim()
+                                        .toString());
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+            ),
 
-              // Uploader(file: _imageFile)
-            ],
-            /////    ElevatedButton(onPressed: (){}, child: Text("Upload Image")),
+            // Uploader(file: _imageFile)
           ],
+          /////    ElevatedButton(onPressed: (){}, child: Text("Upload Image")),
         ),
       ),
     );
   }
-
-  final couponController = TextEditingController();
-  final couponPriceController = TextEditingController();
 }

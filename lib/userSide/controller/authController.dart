@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pearl/userSide/controller/userController.dart';
+import 'package:pearl/userSide/model/user_model.dart';
 import 'package:pearl/userSide/views/loginScreen.dart';
 import 'package:pearl/userSide/views/tabBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -74,12 +75,15 @@ class AuthController extends GetxController {
         CollectionReference records =
             FirebaseFirestore.instance.collection('users');
 
-        await records.doc(userController.uid).set({
-          'user_id': userController.uid,
-          'email': email,
-          'total_points': 0,
-          'role': "customer",
-        });
+        await records.doc(userController.uid).set(UserModel(
+              userId: userCredential.user!.uid,
+              userName:name,
+              userAddress:"",
+              userEmail: email,
+              userGender: gender,
+              isEmailVerified: userCredential.user!.emailVerified,
+              
+            ).toJson());
 
         // Create a new record document with the current user's ID and the status ("In" or "Out").
 

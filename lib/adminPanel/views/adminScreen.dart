@@ -1,11 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pearl/adminPanel/views/adminHome.dart';
-import 'package:pearl/adminPanel/views/awaitingAdmin.dart';
 import 'package:pearl/adminPanel/controllers/admintabbar.dart';
-import 'package:pearl/adminPanel/views/createOffers.dart';
-import 'package:pearl/userSide/views/homeScreen.dart';
 
 class AdminHome extends StatefulWidget {
   AdminHome({Key? key}) : super(key: key);

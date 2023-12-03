@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:pearl/userSide/views/loginScreen.dart';
+import 'package:pearl/userSide/views/introScreen.dart';
+import 'package:pearl/utils/storage.dart';
+
 import 'firebase_options.dart';
 //import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await StorageServices.to.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -276,6 +279,6 @@ class _MyAppState extends State<MyApp> {
             builder: EasyLoading.init(),
           );
         },
-        child: LoginScreen());
+        child: IntroductionScreens());
   }
 }
