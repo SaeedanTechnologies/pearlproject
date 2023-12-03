@@ -383,13 +383,9 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                             alignment: Alignment.topRight,
                             children: [
                               DragTarget(
-                                
-                                
-                                onAccept: (data) async{
-                                 
+                                onAccept: (data) async {
                                   setState(() {
                                     image1 = data;
-
                                   });
                                 },
                                 builder: (builder, _, __) => Container(
