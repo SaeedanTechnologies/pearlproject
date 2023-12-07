@@ -141,7 +141,7 @@
 //             child: StreamBuilder<QuerySnapshot>(
 //               stream: FirebaseFirestore.instance
 //                   .collection('productImages')
-//                   .where("category", isEqualTo: widget.category)
+//                   .where("category", isEqualTo: controller.selectedCategory.value)
 //                   .snapshots(),
 //               builder: (context, snapshot) {
 //                 if (!snapshot.hasData) {
@@ -183,9 +183,9 @@
 //               GestureDetector(
 //                 onTap: () {
 //                   Get.to(() => QuoteScreen(
-//                       gender: widget.gender,
-//                       category: widget.category,
-//                       size: widget.size));
+//                       gender: controller.selectedGender.value,
+//                       category: controller.selectedCategory.value,
+//                       size: controller.selectSize.value));
 //                 },
 //                 child: Image.asset(
 //                   'assets/images/arrow-slider.png', // Replace with your image path
@@ -320,41 +320,44 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:pearl/userSide/controller/categoryController.dart';
 import 'package:pearl/userSide/views/quote.dart';
+import 'package:pearl/widgets/pearlCustomBtn.dart';
+import 'package:pearl/widgets/targetPearlWidget.dart';
 
 // ignore: must_be_immutable
 class ImagePickerScreen extends StatefulWidget {
-  ImagePickerScreen(
-      {super.key,
-      required this.gender,
-      required this.category,
-      required this.size});
-  String? gender;
-  String? category;
-  String? size;
-
   @override
   State<ImagePickerScreen> createState() => _ImagePickerScreenState();
 }
 
+class PearlData {
+  final String image;
+  final String documentId;
+
+  PearlData({required this.image, required this.documentId});
+}
+
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
-  var image1,
-      image2,
-      image3,
-      image4,
-      image5,
-      image6,
-      image7,
-      image8,
-      image9,
-      image10,
-      image11,
-      image12;
-  Color color = Colors.white;
+  var image1 = "".obs,
+      image2 = "".obs,
+      image3 = "".obs,
+      image4 = "".obs,
+      image5 = "".obs,
+      image6 = "".obs,
+      image7 = "".obs,
+      image8 = "".obs,
+      image9 = "".obs,
+      image10 = "".obs,
+      image11 = "".obs,
+      image12 = "".obs;
+  Color color = Colors.black;
+  var docId = "";
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(SelectCategoryController());
     var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height * .5;
+    var height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 219, 218, 218),
@@ -366,1687 +369,323 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: Container(
+            child: SizedBox(
               width: width,
-              height: height,
-              child: widget.category == 'bracelet'
-                  ? Stack(
-                      children: [
-                        Image.asset(
-                          "assets/images/bracelet-mixte.png",
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          left: 100,
-                          top: 40,
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              DragTarget(
-                                onAccept: (data) async {
-                                  setState(() {
-                                    image1 = data;
-                                  });
-                                },
-                                builder: (builder, _, __) => Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: color,
-                                  ),
-                                  width: 25,
-                                  height: 25,
-                                  child: image1 != null
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              image1 = null;
-                                            });
-                                          },
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                              image1,
-                                            ),
-                                          ),
-                                        )
-                                      : const SizedBox.shrink(),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          left: 83,
-                          top: 110,
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              DragTarget<String>(
-                                onAccept: (data) => setState(() {
-                                  image2 = data;
-                                }),
-                                builder: (builder, _, __) => Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: color,
-                                  ),
-                                  width: 25,
-                                  height: 25,
-                                  child: image2 != null
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              image2 = null;
-                                            });
-                                          },
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                              image2,
-                                            ),
-                                          ),
-                                        )
-                                      : const SizedBox.shrink(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
+              height: 300.h,
+              child: controller.selectedCategory.value == 'Bracelet'
+                  ? Stack(children: [
+                      Image.asset(
+                        "assets/images/bracelet-mixte.png",
+                        fit: BoxFit.cover,
+                      ),
+                      targetPearlWidget(
+                          left: 90,
+                          top: 35,
+                          right: 0,
+                          bottom: 0,
+                          image: image1,
+                          pearlwidth: 25,
+                          pearlheight: 25),
+                      targetPearlWidget(
+                          left: 76,
+                          top: 97,
+                          right: 0,
+                          bottom: 0,
+                          image: image2,
+                          pearlwidth: 25,
+                          pearlheight: 25),
+                      targetPearlWidget(
+                          left: 80,
+                          top: 55,
+                          right: 0,
+                          bottom: 0,
+                          image: image3,
+                          pearlwidth: 25,
+                          pearlheight: 25),
+                      targetPearlWidget(
+                          left: 76,
+                          top: 77,
+                          right: 0,
+                          bottom: 0,
+                          image: image4,
+                          pearlwidth: 25,
+                          pearlheight: 25),
+                      targetPearlWidget(
+                          left: 80,
+                          top: 117,
+                          right: 0,
+                          bottom: 0,
+                          image: image5,
+                          pearlwidth: 25,
+                          pearlheight: 25),
+                      targetPearlWidget(
                           left: 88,
-                          top: 62,
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              DragTarget<String>(
-                                  onAccept: (data) => setState(() {
-                                        image3 = data;
-                                      }),
-                                  builder: (builder, _, __) => Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          color: color,
-                                        ),
-                                        width: 25,
-                                        height: 25,
-                                        child: image3 != null
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    image3 = null;
-                                                  });
-                                                },
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                    image3,
-                                                  ),
-                                                ),
-                                              )
-                                            : const SizedBox.shrink(),
-                                      ))
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          left: 84,
-                          top: 86,
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              DragTarget<String>(
-                                  onAccept: (data) => setState(() {
-                                        image4 = data;
-                                      }),
-                                  builder: (builder, _, __) => Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          color: color,
-                                        ),
-                                        width: 25,
-                                        height: 25,
-                                        child: image4 != null
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    image4 = null;
-                                                  });
-                                                },
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                    image4,
-                                                  ),
-                                                ),
-                                              )
-                                            : const SizedBox.shrink(),
-                                      ))
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          left: 86,
-                          top: 134,
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              DragTarget<String>(
-                                  onAccept: (data) => setState(() {
-                                        image5 = data;
-                                      }),
-                                  builder: (builder, _, __) => Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          color: color,
-                                        ),
-                                        width: 25,
-                                        height: 25,
-                                        child: image5 != null
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    image5 = null;
-                                                  });
-                                                },
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                    image5,
-                                                  ),
-                                                ),
-                                              )
-                                            : const SizedBox.shrink(),
-                                      ))
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          left: 95,
-                          top: 156,
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              DragTarget<String>(
-                                  onAccept: (data) => setState(() {
-                                        image6 = data;
-                                      }),
-                                  builder: (builder, _, __) => Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          color: color,
-                                        ),
-                                        width: 25,
-                                        height: 25,
-                                        child: image6 != null
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    image6 = null;
-                                                  });
-                                                },
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                    image6,
-                                                  ),
-                                                ),
-                                              )
-                                            : const SizedBox.shrink(),
-                                      ))
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : widget.category == "necklace"
-                      ? Stack(
-                          children: [
-                            Image.asset(
+                          top: 137,
+                          right: 0,
+                          bottom: 0,
+                          image: image6,
+                          pearlwidth: 25,
+                          pearlheight: 25),
+                    ])
+                  : controller.selectedCategory.value == 'Necklace'
+                      ? Stack(children: [
+                          Center(
+                            child: Image.asset(
                               "assets/images/collier-femme-36.png",
                               fit: BoxFit.cover,
                             ),
-                            Positioned(
-                              right: 132,
-                              top: 125,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image1 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image1 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image1 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image1,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              right: 146,
-                              top: 144,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image2 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image2 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image2 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image2,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              right: 165,
-                              top: 160,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image3 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image3 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image3 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image3,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              right: 185,
-                              top: 175,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image4 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image4 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image4 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image4,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              right: 185,
-                              top: 175,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image5 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image5 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image5 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image5,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              left: 158,
-                              top: 180,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image6 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image6 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image6 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image6,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              left: 135,
-                              top: 173,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image7 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image7 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image7 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image7,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              left: 115,
-                              top: 163,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image8 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image8 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image8 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image8,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              left: 99,
-                              top: 146,
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  DragTarget<String>(
-                                      onAccept: (data) => setState(() {
-                                            image9 = data;
-                                          }),
-                                      builder: (builder, _, __) => Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: color,
-                                            ),
-                                            width: 25,
-                                            height: 25,
-                                            child: image9 != null
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        image9 = null;
-                                                      });
-                                                    },
-                                                    child: CircleAvatar(
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                        image9,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ))
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
-                      : widget.category == 'ring'
-                          ? Center(
-                              child: Stack(children: [
-                                Image.asset(
+                          ),
+                          targetPearlWidget(
+                              top: 92,
+                              right: 112,
+                              bottom: 0,
+                              image: image1,
+                              pearlwidth: 25,
+                              pearlheight: 25),
+                          targetPearlWidget(
+                              top: 107,
+                              right: 125,
+                              bottom: 0,
+                              image: image2,
+                              pearlwidth: 25,
+                              pearlheight: 25),
+                          targetPearlWidget(
+                              top: 120,
+                              right: 140,
+                              bottom: 0,
+                              image: image3,
+                              pearlwidth: 25,
+                              pearlheight: 25),
+                          targetPearlWidget(
+                              top: 130,
+                              right: 156,
+                              bottom: 0,
+                              image: image4,
+                              pearlwidth: 25,
+                              pearlheight: 25),
+                          targetPearlWidget(
+                              top: 135,
+                              right: 175,
+                              bottom: 0,
+                              image: image5,
+                              pearlwidth: 25,
+                              pearlheight: 25),
+                          targetPearlWidget(
+                              top: 130,
+                              left: 142,
+                              bottom: 0,
+                              image: image6,
+                              pearlwidth: 25,
+                              pearlheight: 25),
+                          targetPearlWidget(
+                              top: 120,
+                              left: 125,
+                              bottom: 0,
+                              image: image7,
+                              pearlwidth: 25,
+                              pearlheight: 25),
+                          targetPearlWidget(
+                              top: 108,
+                              left: 110,
+                              bottom: 0,
+                              image: image8,
+                              pearlwidth: 25,
+                              pearlheight: 25),
+                        ])
+                      : controller.selectedCategory.value == 'Ring'
+                          ? Stack(children: [
+                              Center(
+                                child: Image.asset(
                                   "assets/images/bague-mixte.png",
                                   fit: BoxFit.cover,
                                 ),
-                                Positioned(
-                                  left: 50,
-                                  top: 50,
-                                  child: Stack(
-                                    alignment: Alignment.topRight,
-                                    children: [
-                                      DragTarget<String>(
-                                          onAccept: (data) => setState(() {
-                                                image1 = data;
-                                              }),
-                                          builder: (builder, _, __) =>
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  color: color,
-                                                ),
-                                                width: 40,
-                                                height: 40,
-                                                child: image1 != null
-                                                    ? GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            image1 = null;
-                                                          });
-                                                        },
-                                                        child: CircleAvatar(
-                                                          backgroundImage:
-                                                              NetworkImage(
-                                                            image1,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : const SizedBox.shrink(),
-                                              ))
-                                    ],
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 95,
-                                  top: 30,
-                                  child: Stack(
-                                    alignment: Alignment.topRight,
-                                    children: [
-                                      DragTarget<String>(
-                                          onAccept: (data) => setState(() {
-                                                image2 = data;
-                                              }),
-                                          builder: (builder, _, __) =>
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  color: color,
-                                                ),
-                                                width: 40,
-                                                height: 40,
-                                                child: image2 != null
-                                                    ? GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            image2 = null;
-                                                          });
-                                                        },
-                                                        child: CircleAvatar(
-                                                          backgroundImage:
-                                                              NetworkImage(
-                                                            image2,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : const SizedBox.shrink(),
-                                              ))
-                                    ],
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 45,
-                                  top: 55,
-                                  child: Stack(
-                                    alignment: Alignment.topRight,
-                                    children: [
-                                      DragTarget<String>(
-                                          onAccept: (data) => setState(() {
-                                                image3 = data;
-                                              }),
-                                          builder: (builder, _, __) =>
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(50),
-                                                  color: color,
-                                                ),
-                                                width: 40,
-                                                height: 40,
-                                                child: image3 != null
-                                                    ? GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            image3 = null;
-                                                          });
-                                                        },
-                                                        child: CircleAvatar(
-                                                          backgroundImage:
-                                                              NetworkImage(
-                                                            image3,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : const SizedBox.shrink(),
-                                              ))
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                            )
-                          : widget.category == 'bagJewel'
-                              ? Center(
-                                  child: Stack(children: [
-                                    Image.asset(
+                              ),
+                              targetPearlWidget(
+                                  top: 100,
+                                  right: 120,
+                                  bottom: 0,
+                                  image: image1,
+                                  pearlwidth: 40,
+                                  pearlheight: 40),
+                              targetPearlWidget(
+                                  top: 80,
+                                  right: 160,
+                                  bottom: 0,
+                                  image: image2,
+                                  pearlwidth: 40,
+                                  pearlheight: 40),
+                              targetPearlWidget(
+                                  top: 95,
+                                  left: 125,
+                                  bottom: 0,
+                                  image: image3,
+                                  pearlwidth: 40,
+                                  pearlheight: 40),
+                            ])
+                          : controller.selectedCategory.value == 'BigJewls'
+                              ? Stack(children: [
+                                  Center(
+                                    child: Image.asset(
                                       "assets/images/bijou-sac-6.png",
                                       fit: BoxFit.cover,
                                     ),
-                                    Positioned(
-                                      left: 180,
-                                      top: 145,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image1 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image1 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image1 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image1,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 180,
-                                      top: 168,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image2 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image2 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image2 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image2,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 180,
-                                      top: 190,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image3 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image3 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image3 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image3,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 180,
-                                      bottom: 135,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image4 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image4 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image4 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image4,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 167,
-                                      bottom: 122,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image5 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image5 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image5 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image5,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 160,
-                                      bottom: 100,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image6 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image6 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image6 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image6,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 168,
-                                      bottom: 78,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image7 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image7 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image7 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image7,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 186,
-                                      bottom: 64,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image8 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image8 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image8 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image8,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 160,
+                                  ),
+                                  targetPearlWidget(
+                                      top: 113,
+                                      right: 170,
+                                      bottom: 0,
+                                      image: image1,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      top: 133,
+                                      right: 170,
+                                      bottom: 0,
+                                      image: image2,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      top: 173,
+                                      right: 170,
+                                      bottom: 0,
+                                      image: image3,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      top: 153,
+                                      right: 170,
+                                      bottom: 0,
+                                      image: image4,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      right: 155,
+                                      bottom: 93,
+                                      image: image5,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      right: 145,
                                       bottom: 75,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image9 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image9 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image9 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image9,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 155,
-                                      bottom: 100,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image10 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image10 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image10 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image10,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 162,
-                                      bottom: 122,
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          DragTarget<String>(
-                                              onAccept: (data) => setState(() {
-                                                    image11 = data;
-                                                  }),
-                                              builder: (builder, _, __) =>
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      color: color,
-                                                    ),
-                                                    width: 25,
-                                                    height: 25,
-                                                    child: image11 != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                image11 = null;
-                                                              });
-                                                            },
-                                                            child: CircleAvatar(
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                image11,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                  ))
-                                        ],
-                                      ),
-                                    ),
-                                  ]),
-                                )
-                              : widget.category == 'earrings'
-                                  ? Center(
-                                      child: Stack(children: [
-                                        Image.asset(
+                                      image: image6,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      right: 155,
+                                      bottom: 60,
+                                      image: image7,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      right: 170,
+                                      bottom: 50,
+                                      image: image8,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      left: 150,
+                                      bottom: 60,
+                                      image: image9,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      left: 142,
+                                      bottom: 80,
+                                      image: image10,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                  targetPearlWidget(
+                                      left: 150,
+                                      bottom: 95,
+                                      image: image11,
+                                      pearlwidth: 25,
+                                      pearlheight: 25),
+                                ])
+                              : controller.selectedCategory.value == 'Earrings'
+                                  ? Stack(children: [
+                                      Center(
+                                        child: Image.asset(
                                           "assets/images/boucle-oreille-6.png",
                                           fit: BoxFit.cover,
                                         ),
-                                        Positioned(
-                                          right: 153,
-                                          top: 65,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image1 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image1 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image1 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image1,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 153,
-                                          top: 97,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image2 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image2 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image2 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image2,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 153,
-                                          top: 128,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image3 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image3 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image3 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image3,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 153,
-                                          top: 159,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image4 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image4 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image4 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image4,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 153,
-                                          bottom: 67,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image5 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image5 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image5 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image5,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 153,
-                                          bottom: 35,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image6 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image6 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image6 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image6,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 147,
-                                          top: 65,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image7 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image7 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image7 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image7,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 147,
-                                          top: 97,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image8 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image8 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image8 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image8,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 147,
-                                          top: 128,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image9 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image9 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image9 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image9,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 147,
-                                          top: 159,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image10 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image10 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image10 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image10,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 147,
-                                          bottom: 67,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image11 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image11 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image11 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image11,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          left: 147,
-                                          bottom: 35,
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              DragTarget<String>(
-                                                  onAccept: (data) =>
-                                                      setState(() {
-                                                        image12 = data;
-                                                      }),
-                                                  builder: (builder, _, __) =>
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(50),
-                                                          color: color,
-                                                        ),
-                                                        width: 25,
-                                                        height: 25,
-                                                        child: image12 != null
-                                                            ? GestureDetector(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    image12 =
-                                                                        null;
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundImage:
-                                                                      NetworkImage(
-                                                                    image12,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                      ))
-                                            ],
-                                          ),
-                                        ),
-                                      ]),
-                                    )
+                                      ),
+                                      targetPearlWidget(
+                                          top: 85,
+                                          right: 143,
+                                          bottom: 0,
+                                          image: image1,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          top: 110,
+                                          right: 143,
+                                          bottom: 0,
+                                          image: image2,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          top: 135,
+                                          right: 143,
+                                          bottom: 0,
+                                          image: image3,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          top: 165,
+                                          right: 143,
+                                          bottom: 0,
+                                          image: image4,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          bottom: 85,
+                                          right: 143,
+                                          image: image5,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          bottom: 60,
+                                          right: 143,
+                                          image: image6,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          bottom: 60,
+                                          left: 135,
+                                          image: image7,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          bottom: 85,
+                                          left: 135,
+                                          image: image8,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          bottom: 113,
+                                          left: 135,
+                                          image: image9,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          top: 137,
+                                          left: 135,
+                                          image: image10,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          top: 110,
+                                          left: 135,
+                                          image: image11,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                      targetPearlWidget(
+                                          top: 85,
+                                          left: 135,
+                                          image: image12,
+                                          pearlwidth: 25,
+                                          pearlheight: 25),
+                                    ])
                                   : const Center(),
             ),
           ),
@@ -2054,7 +693,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
               stream: FirebaseFirestore.instance
                   .collection('productImages')
                   .snapshots(),
-              // .where("category", isEqualTo: widget.category)
+              // .where("category", isEqualTo: controller.selectedCategory.value)
               // .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -2063,7 +702,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                     ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 }
-                final pearlImages = snapshot.data!.docs
+                final pearlDataList = snapshot.data!.docs
                     //  .where((doc) => doc['category'] == 'pearl')
                     .map((doc) => doc['pearlImage'] as String)
                     .toList();
@@ -2071,11 +710,15 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                   height: 60.h,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: pearlImages.length,
+                      itemCount: pearlDataList.length,
                       itemBuilder: (context, index) {
+                        final pearlData = pearlDataList[index];
+
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: snapshot.data!.docs[index]['stock'] > 0
+                          child: snapshot.data!.docs[index]['stock'] > 0 &&
+                                  snapshot.data!.docs[index]['isDisable'] ==
+                                      true
                               ? Draggable(
                                   onDragCompleted: () async {
                                     await FirebaseFirestore.instance
@@ -2085,19 +728,19 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                                       "stock": FieldValue.increment(-1)
                                     });
                                   },
-                                  data: pearlImages[index],
+                                  data: pearlData,
                                   feedback: CircleAvatar(
                                     backgroundImage: CachedNetworkImageProvider(
-                                      pearlImages[index],
+                                      pearlData,
                                     ),
                                   ),
                                   childWhenDragging: CircleAvatar(
-                                    backgroundImage: CachedNetworkImageProvider(
-                                        pearlImages[index]),
+                                    backgroundImage:
+                                        CachedNetworkImageProvider(pearlData),
                                   ),
                                   child: CircleAvatar(
-                                    backgroundImage: CachedNetworkImageProvider(
-                                        pearlImages[index]),
+                                    backgroundImage:
+                                        CachedNetworkImageProvider(pearlData),
                                   ),
                                 )
                               : const SizedBox.shrink(),
@@ -2105,25 +748,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                       }),
                 );
               }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Confirm'),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => QuoteScreen(
-                      gender: widget.gender,
-                      category: widget.category,
-                      size: widget.size));
-                },
-                child: Image.asset(
-                  'assets/images/arrow-slider.png', // Replace with your image path
-                  width: 50,
-                  height: 50,
-                ),
-              ),
-            ],
-          ),
+          pearCustomButton("Confirm", () {Get.to(()=>QuoteScreen());})
         ],
       ),
     );

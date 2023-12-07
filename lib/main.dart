@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:pearl/userSide/views/categoryScreen.dart';
+import 'package:pearl/userSide/views/homeScreen.dart';
 import 'package:pearl/userSide/views/introScreen.dart';
+import 'package:pearl/userSide/views/landingpage/landingPage.dart';
 import 'package:pearl/utils/storage.dart';
 
 import 'firebase_options.dart';
@@ -279,6 +282,6 @@ class _MyAppState extends State<MyApp> {
             builder: EasyLoading.init(),
           );
         },
-        child: IntroductionScreens());
+        child: HomeScreen());
   }
 }

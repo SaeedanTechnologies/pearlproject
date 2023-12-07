@@ -17,6 +17,7 @@ class AuthController extends GetxController {
     emailController.dispose();
     passwordController.dispose();
   }
+    var selectedGender = 'Female'.obs; 
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;

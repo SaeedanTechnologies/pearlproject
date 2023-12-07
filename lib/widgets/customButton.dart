@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:pearl/const/colors.dart';
 
@@ -30,10 +31,13 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-          shape: rounded == true ? const StadiumBorder() : null,
-          backgroundColor: backgroundColor,
-          minimumSize: Size(width!, height!),
-         ),
+        shape: rounded == true
+            ? const StadiumBorder()
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.r))),
+        backgroundColor: backgroundColor,
+        minimumSize: Size(width!, height!),
+      ),
       child: loading
           ? SpinKitCircle(
               size: 30.sp,
@@ -41,7 +45,7 @@ class CustomButton extends StatelessWidget {
             )
           : Text(
               buttonName,
-              style: TextStyle(color: textcolor),
+              style: GoogleFonts.philosopher(color: textcolor,fontWeight: FontWeight.bold,fontSize: 18.sp),
             ),
     );
   }

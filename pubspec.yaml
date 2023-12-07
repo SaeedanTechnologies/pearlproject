@@ -60,6 +60,7 @@ dependencies:
   animate_do: ^3.1.2
   introduction_screen: ^3.1.12
   cached_network_image: ^3.3.0
+  google_fonts: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +89,7 @@ flutter:
     - assets/images/arrow-slider.png
     - assets/images/flower.jpg
     - assets/images/
+    - assets/
     - assets/sample_payment_configuration.json
   #   - images/a_dot_ham.jpeg
 

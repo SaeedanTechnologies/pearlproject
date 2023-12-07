@@ -5,19 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pay/pay.dart';
+import 'package:pearl/userSide/controller/categoryController.dart';
 import 'package:pearl/userSide/controller/userController.dart';
 import 'package:pearl/utils/utils.dart';
 
 class QuoteScreen extends StatefulWidget {
-  String? gender;
-
-  String? category;
-
-  String? size;
-
-  QuoteScreen(
-      {required this.category, required this.gender, required this.size});
-
   @override
   State<QuoteScreen> createState() => _QuoteScreenState();
 }
@@ -43,6 +35,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   TextEditingController modelScreenshotController = TextEditingController();
   TextEditingController messageController = TextEditingController();
   RxInt totalPrice = 50.obs;
+
   // Assuming you've previously obtained the 'user' object from Firebase authentication
   // and the Firestore 'orders' collection reference
 //   void submitOrder() async {
@@ -122,6 +115,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   final couponcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var controller=Get.put(SelectCategoryController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Request a Quote'),
@@ -164,7 +158,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                   controller: genderController,
                   readOnly: true,
                   decoration: InputDecoration(
-                    hintText: widget.gender,
+                    hintText: controller.selectedGender.value,
                     border: const OutlineInputBorder(),
                   ),
                 ),
@@ -173,7 +167,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                   controller: accessoryTypeController,
                   readOnly: true,
                   decoration: InputDecoration(
-                    hintText: widget.category,
+                    hintText: controller.selectedCategory.value,
                     border: const OutlineInputBorder(),
                   ),
                 ),
@@ -182,7 +176,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                   controller: measureController,
                   readOnly: true,
                   decoration: InputDecoration(
-                    hintText: widget.size,
+                    hintText:controller.selectSize.value.toString(),
                     border: const OutlineInputBorder(),
                   ),
                 ),

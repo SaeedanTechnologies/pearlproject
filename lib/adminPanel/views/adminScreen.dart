@@ -40,6 +40,11 @@ class _AdminHomeState extends State<AdminHome> {
                 label: "Create Offer",
                 backgroundColor: Colors.white,
               ),
+               BottomNavigationBarItem(
+                icon: Icon(Icons.category),
+                label: "Cataloge",
+                backgroundColor: Colors.white,
+              ),
             ],
             // type: BottomNavigationBarType.shifting,
             currentIndex: controller.selectedIndex.value,
