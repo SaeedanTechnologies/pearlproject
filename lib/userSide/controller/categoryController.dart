@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class SelectCategoryController extends GetxController {
   var selectedGender = "Male".obs;
   var selectedCategory = "Necklace".obs;
-  var selectSize = 0.obs;
+  var selectSize = ''.obs;
 
   var categoryi = "Select Size".obs;
   var necklaceValue = "45cm".obs;

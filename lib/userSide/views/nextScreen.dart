@@ -82,6 +82,7 @@ class SelectSize extends StatelessWidget {
                             value: controller.necklaceValue.value,
                             onChanged: (String? newValue) {
                               controller.necklaceValue.value = newValue!;
+                              controller.selectSize.value=newValue;
                             },
                             items: controller.necklace),
                       )
@@ -92,6 +93,7 @@ class SelectSize extends StatelessWidget {
                                 value: controller.braceletValue.value,
                                 onChanged: (String? newValue) {
                                   controller.braceletValue.value = newValue!;
+                                   controller.selectSize.value=newValue;
                                 },
                                 items: controller.bracelet),
                           )
@@ -103,6 +105,7 @@ class SelectSize extends StatelessWidget {
                                     value: controller.ringValue.value,
                                     onChanged: (String? newValue) {
                                       controller.ringValue.value = newValue!;
+                                       controller.selectSize.value=newValue;
                                     },
                                     items: controller.ring),
                               )
@@ -113,6 +116,7 @@ class SelectSize extends StatelessWidget {
                                     value: controller.bagJewelValue.value,
                                     onChanged: (String? newValue) {
                                       controller.ringValue.value = newValue!;
+                                       controller.selectSize.value=newValue;
                                     },
                                     items: controller.bagJewels)
                                 : controller.selectedCategory.value ==
@@ -124,6 +128,7 @@ class SelectSize extends StatelessWidget {
                                         onChanged: (String? newValue) {
                                           controller.bagJewelValue.value =
                                               newValue!;
+                                               controller.selectSize.value=newValue;
                                         },
                                         items: controller.earringss)
                                     : Container(),

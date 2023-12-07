@@ -115,7 +115,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   final couponcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var controller=Get.put(SelectCategoryController());
+    var controller = Get.put(SelectCategoryController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Request a Quote'),
@@ -176,7 +176,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                   controller: measureController,
                   readOnly: true,
                   decoration: InputDecoration(
-                    hintText:controller.selectSize.value.toString(),
+                    hintText: controller.selectSize.value.toString(),
                     border: const OutlineInputBorder(),
                   ),
                 ),

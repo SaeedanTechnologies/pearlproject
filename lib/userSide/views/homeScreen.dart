@@ -50,7 +50,6 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-             
                 Text(
                   'Select Gender',
                   style: GoogleFonts.philosopher(
@@ -73,7 +72,6 @@ class HomeScreen extends StatelessWidget {
                 pearCustomButton("Select Category", () {
                   Get.to(() => const CategoryScreen());
                 }),
-                
               ],
             ),
           ),
