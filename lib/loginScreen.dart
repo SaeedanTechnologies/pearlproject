@@ -1,9 +1,7 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pearl/controller/userController.dart';
 import 'package:pearl/signupScreen.dart';
 import 'package:pearl/tabBar.dart';
@@ -18,18 +16,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-   UserController userController = Get.put(UserController());
-  
+  UserController userController = Get.put(UserController());
 
-  String playerId ="";
-
- 
-
-
+  String playerId = "";
 
   Future<void> _signIn() async {
     try {
-       final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
 
@@ -39,19 +32,17 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (userCredential.user != null) {
-         userController.uid = userCredential.user!.uid;
-         userController.update();
+        userController.uid = userCredential.user!.uid;
+        userController.update();
 
-          CollectionReference records =
-          FirebaseFirestore.instance.collection('users');
-
+        CollectionReference records =
+            FirebaseFirestore.instance.collection('users');
 
         Get.to(SiteEngineer());
-       
       } else {
         // Handle sign-in failure (e.g., show an error message).
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Sign-in failed. Please check your credentials.'),
           ),
         );
@@ -66,42 +57,37 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
         automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [                                                                                            
+          children: [
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: 
-              ()async{
-     await userController.signInWithEmailAndPassword(_emailController.text, _passwordController.text, context);
+              onPressed: () async {
+                await userController.signInWithEmailAndPassword(
+                    _emailController.text, _passwordController.text, context);
               },
-              
-             
-              child: Text('Sign In'),
+              child: const Text('Sign In'),
             ),
-             ElevatedButton(
-              onPressed:
-              () {
-       Get.to(()=>SignUpScreen());
+            ElevatedButton(
+              onPressed: () {
+                Get.to(() => SignUpScreen());
               },
-              
-        
-              child: Text('SignUp'),
+              child: const Text('SignUp'),
             ),
           ],
         ),
@@ -115,4 +101,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+
+  
 }

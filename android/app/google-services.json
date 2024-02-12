@@ -12,7 +12,20 @@
           "package_name": "com.pearl.pearlproject"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "309952689430-6671qkv1v3vk3d6ogf9oj7unmhsf3tg3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pearl.pearlproject",
+            "certificate_hash": "21cb44513563b8e8f0050567604cf4147d9a1a79"
+          }
+        },
+        {
+          "client_id": "309952689430-6penb1snsanuqn2r6ei98d28lh28pk1e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAa0dOqlbK5GMbONobFFc6r1tH11GXyck4"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "309952689430-6penb1snsanuqn2r6ei98d28lh28pk1e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "309952689430-igrq8r61mtegcjmf3nqig484dncp3885.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pearl.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }
