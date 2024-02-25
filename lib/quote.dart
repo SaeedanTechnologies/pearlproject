@@ -1,6 +1,3 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,21 +13,11 @@ class QuoteScreen extends StatefulWidget {
 
   QuoteScreen(
       {required this.category, required this.gender, required this.size});
-
   @override
   State<QuoteScreen> createState() => _QuoteScreenState();
 }
 
 class _QuoteScreenState extends State<QuoteScreen> {
-  final _paymentItems = [
-    const PaymentItem(
-      label: 'Total',
-      amount: '99.99',
-      status: PaymentItemStatus.final_price,
-    )
-  ];
-  void onGooglePayResult(paymentResult) async {}
-
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -39,12 +26,12 @@ class _QuoteScreenState extends State<QuoteScreen> {
   TextEditingController genderController = TextEditingController();
   TextEditingController modelScreenshotController = TextEditingController();
   TextEditingController messageController = TextEditingController();
-
+  
   // Assuming you've previously obtained the 'user' object from Firebase authentication
   // and the Firestore 'orders' collection reference
 //   void submitOrder() async {
 
-//     final newOrder = {
+//     final newOrder = {s
 //       'name': nameController.text,
 //       'phoneNumber': phoneNumberController.text,
 //       'email': emailController.text,
@@ -65,7 +52,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Column(
+            content: new Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const SizedBox(
@@ -204,18 +191,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
                     border: OutlineInputBorder(),
                   ),
                 ),
-                GooglePayButton(
-                  paymentConfigurationAsset:
-                      "sample_payment_configuration.json",
-                  paymentItems: _paymentItems,
-                  type: GooglePayButtonType.pay,
-                  margin: const EdgeInsets.only(top: 15.0),
-                  onPaymentResult: onGooglePayResult,
-                  loadingIndicator: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
                 const SizedBox(height: 16.0),
+            
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -231,17 +208,17 @@ class _QuoteScreenState extends State<QuoteScreen> {
                       //     widget.category!,
                       //     widget.size!,
                       //     messageController.text);
-                      var price = await FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(auth.FirebaseAuth.instance.currentUser!.uid)
-                          .get()
-                          .then((value) => value['total_points']);
-                      var newprice = 200 + price;
-                      await FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(auth.FirebaseAuth.instance.currentUser!.uid)
-                          .set({"total_points": newprice},
-                              SetOptions(merge: true));
+                      // var price = await FirebaseFirestore.instance
+                      //     .collection("users")
+                      //     .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                      //     .get()
+                      //     .then((value) => value['total_points']);
+                      // var newprice = 200 + price;
+                      // await FirebaseFirestore.instance
+                      //     .collection("users")
+                      //     .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                      //     .set({"total_points": newprice},
+                      //         SetOptions(merge: true));
                     },
                     child: const Text('Ask for Quote'),
                   ),

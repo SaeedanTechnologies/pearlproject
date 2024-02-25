@@ -1,16 +1,16 @@
-import 'package:auth_buttons/auth_buttons.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pearl/controller/userController.dart';
 import 'package:pearl/homeScreen.dart';
 import 'package:pearl/signupScreen.dart';
 import 'package:pearl/tabBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 // import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -128,7 +128,19 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
+final _paymentItems = [
+    const PaymentItem(
+      label: 'Total',
+      amount: '1.0',
+      status: PaymentItemStatus.final_price,
+    ),
+  ];
+  // In your Stateless Widget class or State
+  void onGooglePayResult(paymentResult) async {
+    // Send the resulting Google Pay token to your server or PSP
+    print(paymentResult);
+   
+  }
   @override
   void dispose() {
     _emailController.dispose();

@@ -45,7 +45,8 @@ int tt = 0;
   
   @override  
   Widget build(BuildContext context) {  
-    return Scaffold(  
+    return Scaffold( 
+           resizeToAvoidBottomInset: false, 
       // appBar: AppBar(  
       //   title: const Text('Flutter BottomNavigationBar Example'),  
       //     backgroundColor: Colors.green  

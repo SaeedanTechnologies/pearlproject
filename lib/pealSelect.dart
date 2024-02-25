@@ -2046,65 +2046,64 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                                   : Center(),
             ),
           ),
-          StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('productImages')
-                  .snapshots(),
-              // .where("category", isEqualTo: widget.category)
-              // .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                final pearlImages = snapshot.data!.docs
-                    //  .where((doc) => doc['category'] == 'pearl')
-                    .map((doc) => doc['producImage'] as String)
-                    .toList();
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      pearlImages.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Draggable(
-                          data: pearlImages[index],
-                          feedback: CircleAvatar(
-                            child: Image.network(
-                              pearlImages[index],
-                            ),
-                          ),
-                          childWhenDragging: CircleAvatar(
-                            backgroundImage: NetworkImage(pearlImages[index]),
-                          ),
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(pearlImages[index]),
-                          ),
-                        ),
-                      ),
-                    ));
-              }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Confirm'),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => QuoteScreen(
+          // StreamBuilder<QuerySnapshot>(
+          //     stream: FirebaseFirestore.instance
+          //         .collection('productImages').snapshots(),
+          //         // .where("category", isEqualTo: widget.category)
+          //         // .snapshots(),
+          //     builder: (context, snapshot) {
+          //       if (!snapshot.hasData) {
+          //         return const CircularProgressIndicator();
+          //       } else if (snapshot.connectionState ==
+          //           ConnectionState.waiting) {
+          //         return const CircularProgressIndicator();
+          //       }
+          //       final pearlImages = snapshot.data!.docs
+          //           //  .where((doc) => doc['category'] == 'pearl')
+          //           .map((doc) => doc['producImage'] as String)
+          //           .toList();
+          //       return Row(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: List.generate(
+          //             pearlImages.length,
+          //             (index) => Padding(
+          //               padding: const EdgeInsets.all(8.0),
+          //               child: Draggable(
+          //                 data: pearlImages[index],
+          //                 feedback: CircleAvatar(
+          //                   child: Image.network(
+          //                     pearlImages[index],
+          //                   ),
+          //                 ),
+          //                 childWhenDragging: CircleAvatar(
+          //                   backgroundImage: NetworkImage(pearlImages[index]),
+          //                 ),
+          //                 child: CircleAvatar(
+          //                   backgroundImage: NetworkImage(pearlImages[index]),
+          //                 ),
+          //               ),
+          //             ),
+          //           ));
+          //     }),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Confirm'),
+                  GestureDetector(
+                    onTap: () {
+                       Get.to(() => QuoteScreen(
                       gender: widget.gender,
                       category: widget.category,
                       size: widget.size));
-                },
-                child: Image.asset(
-                  'assets/images/arrow-slider.png', // Replace with your image path
-                  width: 50,
-                  height: 50,
-                ),
+                    },
+                    child: Image.asset(
+                      'assets/images/arrow-slider.png', // Replace with your image path
+                      width: 50,
+                      height: 50,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
         ],
       ),
     );
