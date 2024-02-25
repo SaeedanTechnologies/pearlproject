@@ -196,12 +196,31 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: ()async {
-                    // submitOrder();
-                     await userController.uploadFilesForOrder(_imageFile,context,nameController.text,phoneNumberController.text,emailController.text,widget.gender!,widget.category!,widget.size!,messageController.text);
+                    onPressed: () async {
+                      // submitOrder();
+                      // await userController.uploadFilesForOrder(
+                      //     _imageFile,
+                      //     context,
+                      //     nameController.text,
+                      //     phoneNumberController.text,
+                      //     emailController.text,
+                      //     widget.gender!,
+                      //     widget.category!,
+                      //     widget.size!,
+                      //     messageController.text);
+                      // var price = await FirebaseFirestore.instance
+                      //     .collection("users")
+                      //     .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                      //     .get()
+                      //     .then((value) => value['total_points']);
+                      // var newprice = 200 + price;
+                      // await FirebaseFirestore.instance
+                      //     .collection("users")
+                      //     .doc(auth.FirebaseAuth.instance.currentUser!.uid)
+                      //     .set({"total_points": newprice},
+                      //         SetOptions(merge: true));
                     },
-
-                    child: Text('Ask for Quote'),
+                    child: const Text('Ask for Quote'),
                   ),
                 ),
               ],

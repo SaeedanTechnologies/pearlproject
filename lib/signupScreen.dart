@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,77 +12,71 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-   UserController userController = Get.put(UserController());
+  UserController userController = Get.put(UserController());
   Future<void> _signIn() async {
     try {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
 
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       if (userCredential.user != null) {
-         userController.uid = userCredential.user!.uid;
-         userController.update();
+        userController.uid = userCredential.user!.uid;
+        userController.update();
 
-          CollectionReference records =
-          FirebaseFirestore.instance.collection('users');
+        CollectionReference records =
+            FirebaseFirestore.instance.collection('users');
 
+        await records.doc(userController.uid).set({
+          'user_id': userController.uid,
+          'email': email,
+          'total_points': 0,
+          'role': "customer",
+        });
 
-          await records.doc(userController.uid).set({
-        'user_id': userController.uid,
-        'email': email,
-        'role': "customer", 
-        
-      });
+        // Create a new record document with the current user's ID and the status ("In" or "Out").
 
-      // Create a new record document with the current user's ID and the status ("In" or "Out").
-      
+        //       List<DocumentSnapshot> documents = [];
+        // List cardEx = [];
 
-  //       List<DocumentSnapshot> documents = [];
-  // List cardEx = [];
+        // String? exCardB;
 
-  // String? exCardB;
+        //   documents.clear();
 
+        //   final QuerySnapshot result = await FirebaseFirestore.instance
+        //       .collection('users')
+        //       .where('user_id', isEqualTo: username)
 
-  //   documents.clear();
-   
-  //   final QuerySnapshot result = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .where('user_id', isEqualTo: username)
-     
-  //       .get();
-  //   documents = result.docs;
-  
-  //   print(documents.length);
-  //   if (documents.length > 0) {
-  //     cardEx.add(result.docs);
-    
-  //     print(documents.first["inOut"]);
-       
-  //    userController.inOut  = documents.first["inOut"];
-  //    userController.timeText =  documents.first["timeText"];
-  //    userController.update();
+        //       .get();
+        //   documents = result.docs;
 
-  //   setState(() {
-      
-  //   });
+        //   print(documents.length);
+        //   if (documents.length > 0) {
+        //     cardEx.add(result.docs);
 
-      
-      
-  //   } else {
-  //     Get.snackbar("Information Missing Or invalid",
-  //         "Please write correct information ");
-        
+        //     print(documents.first["inOut"]);
 
-  //   }
-  
+        //    userController.inOut  = documents.first["inOut"];
+        //    userController.timeText =  documents.first["timeText"];
+        //    userController.update();
+
+        //   setState(() {
+
+        //   });
+
+        //   } else {
+        //     Get.snackbar("Information Missing Or invalid",
+        //         "Please write correct information ");
+
+        //   }
+
         Get.to(LoginScreen());
         // Successfully signed in, navigate to the home screen or perform other actions.
         // You can use Navigator to navigate to the next screen.

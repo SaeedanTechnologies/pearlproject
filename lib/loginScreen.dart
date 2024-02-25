@@ -1,12 +1,17 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:pay/pay.dart';
+
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pearl/controller/userController.dart';
+import 'package:pearl/homeScreen.dart';
 import 'package:pearl/signupScreen.dart';
 import 'package:pearl/tabBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -57,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Login'),
         automaticallyImplyLeading: false,
@@ -90,17 +96,33 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: const Text('SignUp'),
             ),
-            GooglePayButton(
-                  // ignore: deprecated_member_use
-                  paymentConfigurationAsset:
-                      'sample_payment_configuration.json',
-                  paymentItems: _paymentItems,
-                  type: GooglePayButtonType.pay,
-                  onPaymentResult: onGooglePayResult,
-                  loadingIndicator: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+            const SizedBox(
+              height: 20,
+            ),
+            GoogleAuthButton(
+              onPressed: () {
+                _handleSignIn();
+              },
+            ),
+            SizedBox(
+              width: 250,
+              child: SignInWithAppleButton(
+                onPressed: () async {
+                  final credential = await SignInWithApple.getAppleIDCredential(
+                    scopes: [
+                      AppleIDAuthorizationScopes.email,
+                      AppleIDAuthorizationScopes.fullName,
+                    ],
+                  );
+                  const SizedBox(
+                    height: 20,
+                  );
+
+                  // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                  // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -126,5 +148,39 @@ final _paymentItems = [
     super.dispose();
   }
 
-  
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+    ],
+  );
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn().then((value) => Get.to(() => HomeScreen()));
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  _handleSignOut() async {
+    try {
+      await _googleSignIn.signOut();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  // _handleAppleSignIn() async {
+  //   try {
+  //     final result = await SignInWithApple.getAppleIDCredential(
+  //       scopes: [
+  //         AppleIDAuthorizationScopes.email,
+  //         AppleIDAuthorizationScopes.fullName,
+  //       ],
+  //     );
+
+  //     print(result);
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
 }
