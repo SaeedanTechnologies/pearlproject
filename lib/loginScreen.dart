@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:pay/pay.dart';
 import 'package:pearl/controller/userController.dart';
 import 'package:pearl/signupScreen.dart';
 import 'package:pearl/tabBar.dart';
@@ -89,12 +90,35 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: const Text('SignUp'),
             ),
+            GooglePayButton(
+                  // ignore: deprecated_member_use
+                  paymentConfigurationAsset:
+                      'sample_payment_configuration.json',
+                  paymentItems: _paymentItems,
+                  type: GooglePayButtonType.pay,
+                  onPaymentResult: onGooglePayResult,
+                  loadingIndicator: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
           ],
         ),
       ),
     );
   }
-
+final _paymentItems = [
+    const PaymentItem(
+      label: 'Total',
+      amount: '1.0',
+      status: PaymentItemStatus.final_price,
+    ),
+  ];
+  // In your Stateless Widget class or State
+  void onGooglePayResult(paymentResult) async {
+    // Send the resulting Google Pay token to your server or PSP
+    print(paymentResult);
+   
+  }
   @override
   void dispose() {
     _emailController.dispose();

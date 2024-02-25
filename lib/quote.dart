@@ -26,19 +26,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   TextEditingController genderController = TextEditingController();
   TextEditingController modelScreenshotController = TextEditingController();
   TextEditingController messageController = TextEditingController();
-  final _paymentItems = [
-    const PaymentItem(
-      label: 'Total',
-      amount: '99.99',
-      status: PaymentItemStatus.final_price,
-    ),
-  ];
-  // In your Stateless Widget class or State
-  void onGooglePayResult(paymentResult) async {
-    // Send the resulting Google Pay token to your server or PSP
-    print(paymentResult);
-   
-  }
+  
   // Assuming you've previously obtained the 'user' object from Firebase authentication
   // and the Firestore 'orders' collection reference
 //   void submitOrder() async {
@@ -204,17 +192,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                GooglePayButton(
-                  // ignore: deprecated_member_use
-                  paymentConfigurationAsset:
-                      'sample_payment_configuration.json',
-                  paymentItems: _paymentItems,
-                  type: GooglePayButtonType.pay,
-                  onPaymentResult: onGooglePayResult,
-                  loadingIndicator: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+            
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
